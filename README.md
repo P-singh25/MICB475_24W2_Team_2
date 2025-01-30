@@ -4,7 +4,7 @@
 
 ## Meeting Minutes and Agenda 
 
-### Feb 1 2025 
+### Jan 31 2025 
 
 ### Meeting Minutes 
 - 
