@@ -1,1 +1,1 @@
-# MICB475_24W2_Team_1
+# MICB475: Data Science Reserach in Microbiology
