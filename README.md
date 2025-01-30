@@ -1,6 +1,6 @@
 # MICB475: Data Science Research in Microbiology
 
-## Team 2 - Pranjali Singh, QingRu Kong, Ran Tao, Tina Wang, Zurui Zhu
+## Team 2 - QingRu Kong, Pranjali Singh, Ran Tao, Tina Wang, Zurui Zhu
 
 ## Meeting Minutes and Agenda 
 
