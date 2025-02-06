@@ -6,12 +6,12 @@ Feb 7th, 2025
 ## Agenda
  **Depression dataset**
  Question Ideas:
-→ Effect of different treatment regimen on microbiome, looking at combos
-	→ can combine with the HIV Dataset (https://pmc.ncbi.nlm.nih.gov/articles/PMC10837999/)
-	→ will look at confound variables to make sure these drugs are the ones making a difference
-→ Metabolites
-→ Different mental conditions 
-→ Leukocytes
+- Effect of different treatment regimen on microbiome, looking at combos
+	- can combine with the HIV Dataset (https://pmc.ncbi.nlm.nih.gov/articles/PMC10837999/)
+	- will look at confound variables to make sure these drugs are the ones making a difference
+- Metabolites
+- Different mental conditions 
+- Leukocytes
 
 **IBD Human dataset**
 Question ideas:
