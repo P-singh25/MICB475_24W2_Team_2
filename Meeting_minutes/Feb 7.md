@@ -28,7 +28,7 @@ IBD done last term
 Depression 
 - Group 8 took it
 
-**Topic: **
+**Topic:**
 Look at Choi et at. https://pmc.ncbi.nlm.nih.gov/articles/PMC10080670/
 - tracking time and organ (longitude study, difference between microbiome in different organ)
 - https://ojs.library.ubc.ca/index.php/UJEMI/article/view/199579/193136 (Look at Fig 5, maybe something like this, but with mouse body)
