@@ -24,3 +24,18 @@ Question ideas:
 **All of the datasets are from the MICB475 database**
 
 ## Meeting Minutes
+IBD done last term
+Depression 
+- Group 8 took it
+
+**Topic: **
+Look at Choi et at. https://pmc.ncbi.nlm.nih.gov/articles/PMC10080670/
+- tracking time and organ (longitude study, difference between microbiome in different organ)
+- https://ojs.library.ubc.ca/index.php/UJEMI/article/view/199579/193136 (Look at Fig 5, maybe something like this, but with mouse body)
+
+**To Do**
+- detailed research question
+- few aims and analysis, breakdown into detailed plan
+- outline for proposal
+- look through dataset overview, need database proceed before proposal is due
+- online next week!!!!!! yaaaa
