@@ -20,5 +20,12 @@ What is the spatial microbial difference in separate organs at various time poin
 ### Aim 2
 1. Track gut bacteria migration through different organs
 2. Identify specific population of bacteria that are not previously present in other organs
-3. Identify the emergence of new bacteria in the lymphoid organs at the endpoint, and backtrack the origin 
+3. Identify the emergence of new bacteria in the lymphoid organs at the endpoint, and backtrack the origin
+
+### Question for Hans/Evelyn:
+1. All the annotations on the figures. Do they have to be using R? Can we annotate using other methods?
+2. Dendritic Cell 16 rRNA data was used in the paper, but we could not find it?
+3. What can we use to determine metabolic pathways associated with the bacteria we identify? How do we determine if the bacteria is pathogenic?
+4. Would we be able to correlate bacteria with disease severity (tumor progression?
+
 
