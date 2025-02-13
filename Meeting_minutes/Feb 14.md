@@ -7,4 +7,7 @@ Feb 14th, 2025
 
 ### Research question: 
 
-What is the spatial microbial difference in separate organs at various time points throughout the ICT treatment in mice? 
+What is the spatial microbial difference in separate organs at various time points throughout the ICT treatment in mice with melanoma? 
+
+### Aim 1
+1. Look at microbiome differences in different organs using Alpha diversity. 
