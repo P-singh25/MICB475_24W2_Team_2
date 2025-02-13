@@ -14,6 +14,7 @@ What is the spatial microbial difference in separate organs at various time poin
 2. Weighted UniFrac Diversity analysis (beta diversity) using different grouping methods
    
    a. grouping by organs
+   
    b. grouping by timepoints
 
 ### Aim 2
