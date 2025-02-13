@@ -11,7 +11,7 @@ What is the spatial microbial difference in separate organs at various time poin
 
 ### Aim 1
 1. Look at microbiome differences in different organs using Alpha diversity.
-2. Weighted UniFrac Diversity analysis - beta diversity
+2. Weighted UniFrac Diversity analysis using beta diversity
 
 ### Aim 2
 1. Track gut bacteria migration through different organs
