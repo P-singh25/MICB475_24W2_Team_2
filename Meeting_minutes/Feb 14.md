@@ -27,5 +27,6 @@ What is the spatial microbial difference in separate organs at various time poin
 2. Dendritic Cell 16 rRNA data was used in the paper, but we could not find it?
 3. What can we use to determine metabolic pathways associated with the bacteria we identify? How do we determine if the bacteria is pathogenic?
 4. Would we be able to correlate bacteria with disease severity (tumor progression)? (I think we need to find other datasets...)
+5. Confirm our truncation length for denoising our data.
 
 
