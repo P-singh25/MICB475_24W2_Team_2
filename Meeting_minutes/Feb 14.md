@@ -29,4 +29,21 @@ What is the spatial microbial difference in separate organs at various time poin
 4. Would we be able to correlate bacteria with disease severity (tumor progression)? (I think we need to find other datasets...)
 5. Confirm our truncation length for denoising our data.
 
+### Meeting Minutes
+Approach to the paper
+
+Aim 1: compare microbial diversity across organs
+1. alpha and beta diversity
+2. core microbiome
+3. deseq
+4. indicator taxa
+Aim 2： within each organ site, compare 4 days periods where Day 1-4 is the pre-treatment (control)
+1. alpha and beta diversity
+2. core microbiome
+3. indicator taxa --> will identify microbes of interest
+Aim 3: longitudinal of microbes of interest across organs
+1. longitudinal analysis
+2. optional: network analysis
+Aim 4: literature research
+1. correlate microbe with ICT/tumor
 
