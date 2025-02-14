@@ -24,7 +24,7 @@ What is the spatial microbial difference in separate organs at various time poin
 
 ### Question for Hans/Evelyn:
 1. All the annotations on the figures. Do they have to be using R? Can we annotate using other methods?
-2. Dendritic Cell 16 rRNA data was used in the paper, but we could not find it?
+2. Dendritic Cell 16S rRNA data was used in the paper, but we could not find it?
 3. What can we use to determine metabolic pathways associated with the bacteria we identify? How do we determine if the bacteria is pathogenic?
 4. Would we be able to correlate bacteria with disease severity (tumor progression)? (I think we need to find other datasets...)
 5. Confirm our truncation length for denoising our data.
@@ -46,4 +46,10 @@ Aim 3: longitudinal of microbes of interest across organs
 2. optional: network analysis
 Aim 4: literature research
 1. correlate microbe with ICT/tumor
+
+Answers to questions
+1. Yes. Can use Powerpoint.
+2. Probably not.
+3. Literature research.
+4. Not. (Literature research.)
 
