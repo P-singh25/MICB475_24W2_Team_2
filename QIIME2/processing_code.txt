@@ -43,11 +43,12 @@ qiime feature-classifier extract-reads \
   --p-r-primer CAAGCAGAAGACGGCATACGAGAT \
   --o-reads ref-seqs-trimmed.qza
 
+_____________
 #taxonomy.qza
 qiime feature-classifier classify-sklearn \
   --i-classifier classifier.qza \
   --i-reads rep-seqs.qza \
-   --p-confidence disable \
+  --p-confidence disable \
   --o-classification taxonomy.qza
 
 ERROR: Plugin error from feature-classifier:
