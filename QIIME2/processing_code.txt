@@ -42,3 +42,16 @@ qiime feature-classifier extract-reads \
   --p-f-primer AATGATACGGCGACCACCGAGA \
   --p-r-primer CAAGCAGAAGACGGCATACGAGAT \
   --o-reads ref-seqs-trimmed.qza
+
+#taxonomy.qza
+qiime feature-classifier classify-sklearn \
+  --i-classifier classifier.qza \
+  --i-reads rep-seqs.qza \
+   --p-confidence disable \
+  --o-classification taxonomy.qza
+
+ERROR: Plugin error from feature-classifier:
+
+  this classifier does not support confidence values
+
+Debug info has been saved to /home/qiime2/TMP/qiime2-q2cli-err-84s7scdk.log
