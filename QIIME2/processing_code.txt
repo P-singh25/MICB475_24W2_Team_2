@@ -36,23 +36,51 @@ qiime feature-table summarize \
 #imported the qzv file to local computer for visualization using view.qiime2.org
 scp root@10.19.139.162:/data/team_2/table.qzv .
 
-#
+#create new classifier for our own primer set
 qiime feature-classifier extract-reads \
   --i-sequences /mnt/datasets/silva_ref_files/silva-138-99-seqs.qza \
-  --p-f-primer AATGATACGGCGACCACCGAGA \
-  --p-r-primer CAAGCAGAAGACGGCATACGAGAT \
+  --p-f-primer GTGCCAGCMGCCGCGGTAA \
+  --p-r-primer GGACTACHVGGGTWTCTAAT \
   --o-reads ref-seqs-trimmed.qza
 
-_____________
-#taxonomy.qza
+qiime feature-classifier fit-classifier-naive-bayes \
+  --i-reference-reads ref-seqs-trimmed.qza \
+  --i-reference-taxonomy /mnt/datasets/silva_ref_files/silva-138-99-tax.qza \
+  --o-classifier classifier.qza
+
+#create taxonomy file
 qiime feature-classifier classify-sklearn \
   --i-classifier classifier.qza \
   --i-reads rep-seqs.qza \
-  --p-confidence disable \
   --o-classification taxonomy.qza
 
-ERROR: Plugin error from feature-classifier:
+qiime phylogeny align-to-tree-mafft-fasttree \
+  --i-sequences rep-seqs.qza \
+  --o-alignment aligned-rep-seqs.qza \
+  --o-masked-alignment masked-aligned-rep-seqs.qza \
+  --o-tree unrooted-tree.qza \
+  --o-rooted-tree rooted-tree.qza 
 
-  this classifier does not support confidence values
+mkdir export
 
-Debug info has been saved to /home/qiime2/TMP/qiime2-q2cli-err-84s7scdk.log
+qiime tools export \
+--input-path taxonomy.qza \
+--output-path export
+
+qiime tools export \
+--input-path table.qza \
+--output-path export
+
+biom convert \
+-i feature-table.biom \
+--to-tsv \
+-o feature-table.txt
+
+qiime tools export --input-path rooted-tree.qza --output-path exported_tree
+
+#export all files to local computer
+scp root@10.19.139.162:/data/team_2/export/feature-table.txt .
+scp root@10.19.139.162:/data/team_2/export/taxonomy.tsv .
+scp root@10.19.139.162:/data/team_2/exported_tree/tree.nwk .
+scp root@10.19.139.162:/mnt/datasets/project_2/melanoma/melanoma_metadata.tsv .
+scp root@10.19.139.162:/data/team_2/rep-seqs.qzv .
