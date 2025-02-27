@@ -63,7 +63,10 @@ TAX <- tax_table(tax_mat)
 
 #Make phyloseq object
 pj2 <- phyloseq(OTU, SAMP, TAX, phylotree)
-save(mt, file="pj2.RData")
+save(pj2, file="pj2.RData")
+
+
+
 
 # Remove non-bacterial sequences, if any
 pj2_filt <- subset_taxa(pj2,  Domain == "d__Bacteria" & Class!="c__Chloroplast" & Family !="f__Mitochondria")
