@@ -66,8 +66,6 @@ pj2 <- phyloseq(OTU, SAMP, TAX, phylotree)
 save(pj2, file="pj2.RData")
 
 
-
-
 # Remove non-bacterial sequences, if any
 pj2_filt <- subset_taxa(pj2,  Domain == "d__Bacteria" & Class!="c__Chloroplast" & Family !="f__Mitochondria")
 
@@ -89,11 +87,4 @@ rare <- rarefy_even_depth(pj2_filt_nolow_samps, rngseed = 1, sample.size = 650)
 data_rare <- as.data.frame(sample_data(rare))
 
 
-#alpha diversity
-alpha_diversity <- estimate_richness(rare, measures = c("Shannon", "Simpson", "Chao1", "Observed"))
-alpha_div_df <- data.frame(sample_data(rare), alpha_diversity)
-ggplot(alpha_div_df, aes(x = group, y = Shannon, fill = group)) + 
-  geom_boxplot() + 
-  theme_minimal() + 
-  labs(title = "Shannon Diversity by Group") +
-  facet_wrap(~location, scales = 'free')
+
