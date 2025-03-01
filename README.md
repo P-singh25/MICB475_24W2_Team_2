@@ -4,10 +4,10 @@
 <br/>
 
 ## Meeting Minutes 
-[Meeting Minutes Folder](MICB475_24W2_Team_2/Meeting_minutes)
+[Meeting Minutes Folder](MICB475_24W2_Team_2/Meeting_minutes/)
 
 ## Notebooks
-[Notebook Entries](MICB475_24W2_Team_2/Notebook)
+[Notebook Entries](MICB475_24W2_Team_2/Notebook/)
 
 <br/>
 <br/>
