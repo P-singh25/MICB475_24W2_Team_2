@@ -29,7 +29,7 @@ What is the spatial microbial difference in separate organs at various time poin
 4. Would we be able to correlate bacteria with disease severity (tumor progression)? (I think we need to find other datasets...)
 5. Confirm our truncation length for denoising our data.
 
-### Meeting Minutes
+## Meeting Minutes
 Approach to the paper
 
 Aim 1: compare microbial diversity across organs
