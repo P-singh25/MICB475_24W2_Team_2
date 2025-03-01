@@ -3,7 +3,7 @@ Team 2 - QingRu Kong, Pranjali Singh, Ran Tao, Tina Wang, Zurui Zhu
 
 Jan 31st, 2025 
 
-### Meeting Minutes 
+## Meeting Minutes 
 
 Future meeting action items:
 - Make agenda before the meeting (before Thursday night) and post on github
