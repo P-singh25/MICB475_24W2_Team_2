@@ -28,7 +28,7 @@ To perform the alpha diversity analysis using Faith PD and generate the plot for
 
 
 ## Code: 
-[Alpha diversity code](R_codes/Alpha_diversity.R)
+[Alpha diversity code](MICB475_24W2_Team_2/R_codes/Alpha_diversity.R)
    
 ## Results: 
 #### Analysis 1
