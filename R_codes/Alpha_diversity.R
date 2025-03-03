@@ -1,6 +1,7 @@
 library(phyloseq)
 library(picante)
 library(tidyverse)
+library(ggsignif)
 
 #### load phyloseq object ####
 load("pj2.RData")
@@ -20,15 +21,39 @@ ggplot(alpha_div_df, aes(x = group, y = Shannon, fill = group)) +
 #### faith pd ####
 
 ## pretreatment 
-phylo_pre <- subset_samples(pj2, group == "Pre-ICI")
+phylo_pre <- subset_samples(pj2, group == "Pre-ICI") %>%
+  subset_samples(location != "Stool")
+
 phylo_dist_pre <- pd(t(otu_table(phylo_pre)), phy_tree(phylo_pre),
                  include.root=F)
 sample_data(phylo_pre)$PD <- phylo_dist_pre$PD
 
+## Significance 
+phylo_pre_sd <- sample_data(phylo_pre)
+phylo_pre_wdiv <- data.frame(phylo_pre_sd, phylo_dist_pre)
+
+### Kruskall-Wallis 
+kruskal_pre <- kruskal.test(PD ~ location, data = phylo_pre_wdiv)
+### significant
+
+### ANOVA 
+lm_pd_vs_loca_log <- lm(log(PD) ~ location, data=phylo_pre_wdiv)
+anova_pd_vs_loca_log <- aov(lm_pd_vs_loca_log)
+summary(anova_pd_vs_loca_log)
+TukeyHSD(anova_pd_vs_loca_log)
+### significant: Spleen-MLN, TDLN-Spleen, Tumor-Spleen
+
 plot.pd_pre <- ggplot(sample_data(phylo_pre), aes(location, PD)) + 
   geom_boxplot() +
-  xlab("Subject ID") +
-  ylab("Phylogenetic Diversity")
+  geom_point() +
+  xlab("Location") +
+  ylab("Phylogenetic Diversity") +
+  theme_classic()+
+  ylim(0, 8.5) +
+  geom_signif(comparisons = list(c("Spleen","MLN"), c("TDLN", "Spleen"), c("Tumor","Spleen")),
+              y_position = c(8, 7, 6),
+              annotations = c("0.0006","0.002","0.0004"))
+
 
 ## compare within one organ before and after treatment
 phylo_dist <- pd(t(otu_table(pj2)), phy_tree(pj2),
