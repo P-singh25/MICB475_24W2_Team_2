@@ -34,7 +34,6 @@ phylo_pre_wdiv <- data.frame(phylo_pre_sd, phylo_dist_pre)
 
 ### Kruskall-Wallis 
 kruskal_pre <- kruskal.test(PD ~ location, data = phylo_pre_wdiv)
-### significant
 
 ### ANOVA 
 lm_pd_vs_loca_log <- lm(log(PD) ~ location, data=phylo_pre_wdiv)
@@ -56,11 +55,42 @@ plot.pd_pre <- ggplot(sample_data(phylo_pre), aes(location, PD)) +
 
 
 ## compare within one organ before and after treatment
-phylo_dist <- pd(t(otu_table(pj2)), phy_tree(pj2),
-                     include.root=F)
-sample_data(pj2)$PD <- phylo_dist$PD
+phylo_both <- subset_samples(pj2, location != "Stool")
 
-plot.pd_location <- ggplot(sample_data(pj2), aes(group, PD)) + 
+
+phylo_dist <- pd(t(otu_table(phylo_both)), phy_tree(phylo_both),
+                     include.root=F)
+sample_data(phylo_both)$PD <- phylo_dist$PD
+
+## Significance 
+phylo_sd <- sample_data(phylo_both)
+phylo_wdiv <- data.frame(phylo_sd, phylo_dist)
+
+### Kruskall-Wallis 
+kruskal <- kruskal.test(PD ~ group, data = phylo_wdiv)
+
+### ANOVA 
+
+phylo_location <- unique(phylo_wdiv$location)
+
+for (loc in phylo_location) {
+  cat("\nANOVA for Location:", loc, "\n")
+  
+  subset_data <- subset(phylo_wdiv, location == loc)
+  
+  lm_pd_vs_group_log <- lm(log(PD) ~ group, data=subset_data)
+  anova_pd_vs_group_log <- aov(lm_pd_vs_group_log)
+  summary(anova_pd_vs_group_log)
+  print(TukeyHSD(anova_pd_vs_group_log))
+}
+
+### significant groups: 
+## Spleen: Pre-ICI-Post-ICI2
+## MLN: Post ICI 1/2/3 - Day 0
+## tumor: nothing 
+## TLDN: nothing 
+
+plot.pd_location <- ggplot(sample_data(phylo_both), aes(group, PD)) + 
   geom_boxplot() +
   xlab("Subject ID") +
   ylab("Phylogenetic Diversity") +
