@@ -28,6 +28,9 @@ For next meeting:
    **Fix Suggestions:**
     - Remove prefix for taxonomic classification (ex. D__Domain, remove D__) in qiime - could remove for aesthetic but not the issue here
  
+Revision
+- Group AVS by GROUP (ex. PreICI) instead of SAMPLE
+ 
 **Prosopsal revision**
 - just fix the citation
       
