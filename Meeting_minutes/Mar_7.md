@@ -24,7 +24,8 @@ For next meeting:
 - Remove stool, not going to work
 - facetwrap ok, putting everything in the same plot
 - maybe something from before, during data processing is not done properly
-  **Fix Suggestions:**
+
+   **Fix Suggestions:**
     - Remove prefix for taxonomic classification (ex. D__Domain, remove D__) in qiime - could remove for aesthetic but not the issue here
  
 **Prosopsal revision**
