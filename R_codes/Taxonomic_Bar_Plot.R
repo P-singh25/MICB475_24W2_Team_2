@@ -7,6 +7,38 @@ library(tibble)
 
 # Load the processed phyloseq object
 load("pj2.RData")
+otu_table <- otu_table(pj2)
+head(otu_table)
+taxa_are_rows(otu_table)
+
+summary(as.vector(otu_table))
+sum(rowSums(otu_table) == 0)
+
+sample_sums(pj2)
+
+sample_data(pj2)
+otu_table(pj2)
+
+
+
+ps_phylum <- tax_glom(ps_relabund, taxrank = "Phylum")
+
+tax_table(pj2_new)
+sample_data(pj2_new)
+
+sum(is.na(tax_table(pj2)[, "Phylum"]))
+pj2_new <- subset_taxa(pj2, !is.na(Phylum)) 
+
+sum(is.na(tax_table(pj2_new)[, "Phylum"]))
+
+plot_bar(pj2_new, fill="Phylum") 
+pj2_RA <- transform_sample_counts(pj2_2, function(x) x/sum(x))
+
+plot_bar(pj2_RA, x = "group", fill="Phylum") + 
+  facet_wrap(.~location, scale = "free_x")
+
+
+
 
 # Using the rarefied dataset, filter out completely unclassified taxas and then aggregate the data at the Phylum level
 pj2_rare <- pj2 %>%
