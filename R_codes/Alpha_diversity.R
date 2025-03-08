@@ -3,6 +3,11 @@ library(picante)
 library(tidyverse)
 library(ggsignif)
 
+install.packages("ggsci")  # If you haven't installed it
+library(ggsci)
+
+library(scales)
+
 #### load phyloseq object ####
 load("pj2.RData")
 ls()
@@ -24,6 +29,9 @@ ggplot(alpha_div_df, aes(x = group, y = Shannon, fill = group)) +
 phylo_pre <- subset_samples(pj2, group == "Pre-ICI") %>%
   subset_samples(location != "Stool")
 
+sample_data(phylo_pre)$location <- factor(sample_data(phylo_pre)$location, 
+                                          levels = c("Spleen", "MLN", "TDLN", "Tumor"))  
+
 phylo_dist_pre <- pd(t(otu_table(phylo_pre)), phy_tree(phylo_pre),
                  include.root=F)
 sample_data(phylo_pre)$PD <- phylo_dist_pre$PD
@@ -42,16 +50,24 @@ summary(anova_pd_vs_loca_log)
 TukeyHSD(anova_pd_vs_loca_log)
 ### significant: Spleen-MLN, TDLN-Spleen, Tumor-Spleen
 
-plot.pd_pre <- ggplot(sample_data(phylo_pre), aes(location, PD)) + 
-  geom_boxplot() +
+plot.pd_pre <- ggplot(sample_data(phylo_pre), aes(x = location, y = PD)) + 
+  geom_boxplot(aes(fill = location)) +
   geom_point() +
   xlab("Location") +
   ylab("Phylogenetic Diversity") +
   theme_classic()+
-  ylim(0, 8.5) +
-  geom_signif(comparisons = list(c("Spleen","MLN"), c("TDLN", "Spleen"), c("Tumor","Spleen")),
-              y_position = c(8, 7, 6),
-              annotations = c("0.0006","0.002","0.0004"))
+  geom_signif(comparisons = list(c("Tumor","Spleen"), c("TDLN", "Spleen"), c("Spleen","MLN")),
+              y_position = c(9.5, 8.5, 7.5),
+              annotations = c("P = 0.0006","P = 0.002","P = 0.0004")) +
+  scale_fill_npg() +
+  expand_limits(y = 10) +
+  scale_y_continuous(breaks = seq(0, 10, by = 2), 
+                     labels = c("0", "2", "4", "6", "8", "10")) +
+  theme(axis.text.y = element_text(size = 10, angle = 0, color = "black"), 
+        axis.text.x = element_text(size = 10, angle = 0, color = "black"))
+
+ggsave(("Alpha_Diversity_Pretreatment.png"), plot.pd_pre, width = 6, height = 3.5)
+
 
 
 ## compare within one organ before and after treatment
