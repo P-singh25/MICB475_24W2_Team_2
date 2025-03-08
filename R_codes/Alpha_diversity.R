@@ -5,7 +5,6 @@ library(ggsignif)
 
 install.packages("ggsci")  # If you haven't installed it
 library(ggsci)
-
 library(scales)
 
 #### load phyloseq object ####
@@ -59,12 +58,12 @@ plot.pd_pre <- ggplot(sample_data(phylo_pre), aes(x = location, y = PD)) +
   geom_signif(comparisons = list(c("Tumor","Spleen"), c("TDLN", "Spleen"), c("Spleen","MLN")),
               y_position = c(9.5, 8.5, 7.5),
               annotations = c("P = 0.0006","P = 0.002","P = 0.0004")) +
-  scale_fill_npg() +
+  scale_fill_npg(name = "Location") +
   expand_limits(y = 10) +
   scale_y_continuous(breaks = seq(0, 10, by = 2), 
                      labels = c("0", "2", "4", "6", "8", "10")) +
   theme(axis.text.y = element_text(size = 10, angle = 0, color = "black"), 
-        axis.text.x = element_text(size = 10, angle = 0, color = "black"))
+        axis.text.x = element_text(size = 10, angle = 0, color = "black")) 
 
 ggsave(("Alpha_Diversity_Pretreatment.png"), plot.pd_pre, width = 6, height = 3.5)
 
