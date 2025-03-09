@@ -5,6 +5,74 @@ library(dplyr)
 library(tidyverse)
 library(tibble)
 
+load("pj2.RData")
+
+pj2_melted <- psmelt(pj2)
+
+pj2_melted_spleen <- pj2_melted %>%
+  filter(location == "Spleen") %>%
+  filter(group != "Day0") %>%
+  mutate(group = factor(group, levels = c("Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3"))) %>%
+  drop_na()
+
+pj2_group_total <- pj2_melted_spleen %>%
+  group_by(group) %>%
+  mutate(Total_Abundance = sum(Abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+pj2_ra <- pj2_group_total %>%
+  group_by(group, OTU) %>%
+  mutate(Relative_Abundance = sum(Abundance)/Total_Abundance)
+
+ggplot(data = pj2_ra, aes(x = group, y = Relative_Abundance, fill = Phylum)) +
+  geom_bar(stat = "identity", position = "fill") +
+  theme_bw()
+
+
+phylo <- pj2
+sample_phylo <- sample_data(phylo)
+
+phyloseq_subset <- sample_phylo [, c("group", "location")]
+sample_data(phylo) <- phyloseq_subset
+
+FD_phyloseq_otu<- otu_table(phylo)
+FD_otu<-as.data.frame(FD_phyloseq_otu)
+
+FD_otu_relative <- FD_otu %>%
+  dplyr::mutate_at(c(1:ncol(FD_otu)), funs(./sum(.)*100))
+
+sum(FD_otu_relative$SRR22283598)
+
+FD_otu_relative1<- rownames_to_column(FD_otu_relative, var ="ASV")
+
+FD_otu_relative_melt<- reshape2::melt(data = FD_otu_relative1, 
+                                      measure.vars = 2:ncol(FD_otu_relative1), # melt using all sample columns
+                                      variable.name = "Group", # this will be the default x axis name
+                                      value.name = "Relative_Abundance", # this will be the default y axis name
+                                      as.is = TRUE # prevents type conversion of strings to factors
+) #16929     2
+
+
+FD_phyloseq_tax<- tax_table(phylo)
+FD_tax<-as.data.frame(FD_phyloseq_tax)
+FD_tax1<- rownames_to_column(FD_tax, var ="ASV")
+
+test<- dplyr::left_join(FD_otu_relative_melt,FD_tax1, by = "ASV")
+
+FD_phyloseq_sam = sample_data(phylo)
+FD_phyloseq_sam_df <- data.frame(FD_phyloseq_sam)
+
+FD_phyloseq_sam_sub1 <- rownames_to_column(FD_phyloseq_sam_df, var = "Group")
+
+taxa_ra<- dplyr::left_join(test,FD_phyloseq_sam_sub1, by = "Group")
+
+taxa_ra_spleen <- taxa_ra %>%
+  filter(location == "Spleen") %>%
+  drop_na()
+
+ra.p <- ggplot(data = taxa_ra_spleen, aes(x = group, y = Phylum)) +
+  geom_bar(stat="identity")
+
 # Load the processed phyloseq object
 load("pj2.RData")
 otu_table <- otu_table(pj2)
