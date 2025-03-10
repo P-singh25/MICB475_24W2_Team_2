@@ -32,7 +32,7 @@ wunifrac_facet <- plot_ordination(pj2, pcoa_wu, color = "location", shape="group
   facet_wrap(~ group) +  # Creates a separate plot for each group
   #stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
   labs(pch="Treatment group", col="Organ") +
-  theme_bw()
+  theme_bw() 
 
 wunifrac_facet
 
@@ -59,7 +59,8 @@ bcurtis_facet <- plot_ordination(pj2, pcoa_bray, color = "location", shape = "gr
   facet_wrap(~ group) +  # Creates separate plots for each group
   #stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
   labs(pch="Treatment group", col="Organ") +
-  theme_minimal()  # Optional: clean theme
+  theme_minimal() +
+  stat_ellipse(aes(group = location), level = 0.95, linetype = "solid")  # Optional: clean theme
 
 bcurtis_facet
 
@@ -69,3 +70,55 @@ bcurtis_base <- plot_ordination(pj2, pcoa_bray, color = "location", shape = "gro
   theme_minimal()  # Optional: clean theme
 
 bcurtis_base
+
+#unweighted
+#### Load Data ####
+load("pj2.RData")
+
+### Filter data ###
+pj2_filtered <- pj2 %>%
+  subset_samples(location != "Stool") %>%
+  subset_samples(group != "Day 0")
+
+#### Check Sample Data ####
+sample_data(pj2_filtered)
+
+#### Beta Diversity - Unweighted UniFrac ####
+# Compute unweighted UniFrac distance
+uu_dm <- distance(pj2_filtered, method="unifrac")
+
+# Check for NA or infinite values
+sum(is.na(uu_dm))  # Should return 0
+sum(is.infinite(uu_dm))  # Should return 0
+
+# Replace NA values if needed
+uu_dm[is.na(uu_dm)] <- 0
+
+# Prune samples with zero counts
+pj2_filtered <- prune_samples(sample_sums(pj2_filtered) > 0, pj2_filtered)
+
+# Recompute distance matrix after pruning
+uu_dm <- distance(pj2_filtered, method="unifrac")
+
+# Perform PCoA ordination with Cailliez correction
+pcoa_uu <- ordinate(pj2_filtered, method="PCoA", distance=uu_dm, correction="cailliez")
+
+# Plot ordination
+plot_ordination(pj2_filtered, pcoa_uu, color = "location", shape="group")
+
+# Faceted plot
+unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location", shape="group") +
+  facet_wrap(~ group) +
+  labs(pch="Treatment group", col="Organ") +
+  theme_bw() +
+  stat_ellipse(aes(group = location), level = 0.95, linetype = "solid")
+
+unifrac_facet
+
+# Base plot
+unifrac_base <- plot_ordination(pj2_filtered, pcoa_uu, color = "location", shape="group") +
+  labs(pch="Treatment group", col="Organ") +
+  theme_bw() +
+  stat_ellipse(aes(group = location), level = 0.95, linetype = "solid")
+
+unifrac_base
