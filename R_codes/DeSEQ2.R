@@ -55,11 +55,10 @@ DESEQ_mpt <- DESeq(pj2_all_deseq)
 res_all <- results(DESEQ_mpt, tidy=TRUE, 
                #this will ensure that No is your reference group
                contrast = c("group", "Post-ICI1", "Pre-ICI")) 
-res_all <- res_all[!is.na(res_all$padj), ]
 
 # To get table of results
 sigASVs_all <- res_all %>% 
-  filter(padj<0.05 & log2FoldChange>4) %>%
+  filter(padj<0.01 & log2FoldChange>4) %>%
   filter(!is.na(padj))%>%
   dplyr::rename(ASV=row)
 
