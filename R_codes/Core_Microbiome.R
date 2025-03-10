@@ -33,24 +33,61 @@ Tumor_Post_relabund <- transform_sample_counts(Tumor_Post, fun = function(x) x /
 
 # Identify core microbiome for each group
 # Core microbiome is defined as taxa present in at least 80% of samples (prevalence = 0.8) with any non-zero abundance (detection = 0)
-core_MLN_Pre <- core_members(MLN_Pre_relabund, detection = 0, prevalence = 0.8)
-core_MLN_Post <- core_members(MLN_Post_relabund, detection = 0, prevalence = 0.8)
+core_MLN_Pre <- core_members(MLN_Pre_relabund, detection = 0, prevalence = 0.3)
+core_MLN_Post <- core_members(MLN_Post_relabund, detection = 0, prevalence = 0.3)
 
-core_Spleen_Pre <- core_members(Spleen_Pre_relabund, detection = 0, prevalence = 0.8)
-core_Spleen_Post <- core_members(Spleen_Post_relabund, detection = 0, prevalence = 0.8)
+core_Spleen_Pre <- core_members(Spleen_Pre_relabund, detection = 0, prevalence = 0.3)
+core_Spleen_Post <- core_members(Spleen_Post_relabund, detection = 0, prevalence = 0.3)
 
-core_TDLN_Pre <- core_members(TDLN_Pre_relabund, detection = 0, prevalence = 0.8)
-core_TDLN_Post <- core_members(TDLN_Post_relabund, detection = 0, prevalence = 0.8)
+core_TDLN_Pre <- core_members(TDLN_Pre_relabund, detection = 0, prevalence = 0.3)
+core_TDLN_Post <- core_members(TDLN_Post_relabund, detection = 0, prevalence = 0.3)
 
-core_Tumor_Pre <- core_members(Tumor_Pre_relabund, detection = 0, prevalence = 0.8)
-core_Tumor_Post <- core_members(Tumor_Post_relabund, detection = 0, prevalence = 0.8)
+core_Tumor_Pre <- core_members(Tumor_Pre_relabund, detection = 0, prevalence = 0.3)
+core_Tumor_Post <- core_members(Tumor_Post_relabund, detection = 0, prevalence = 0.3)
 
-tax_table(prune_taxa(core_Tumor_Pre, pj2))
+tax_table(prune_taxa(core_Tumor_Post, pj2))
 
+tax_table(prune_taxa(core_MLN_Post, pj2))
 
+tax_table(prune_taxa(core_TDLN_Post, pj2))
 
+tax_table(prune_taxa(core_Spleen_Post, pj2))
+
+# Find shared taxa
+shared_taxa_post <- Reduce(intersect, list(core_Tumor_Post, core_MLN_Post, core_TDLN_Post, core_Spleen_Post))
+
+# Prune phyloseq object to shared taxa
+shared_physeq_post <- prune_taxa(shared_taxa_post, pj2)
+
+# View taxonomic information
+tax_table(shared_physeq_post)
+
+# Find shared taxa
+shared_taxa_pre <- Reduce(intersect, list(core_Tumor_Pre, core_MLN_Pre, core_TDLN_Pre, core_Spleen_Pre))
+
+shared_physeq_pre <- prune_taxa(shared_taxa_pre, pj2)
+
+tax_table(shared_physeq_pre)
 
 library(ggVennDiagram)
+
+ggVennDiagram(
+  x = list(
+    "MLN Post-ICI3" = core_MLN_Post,
+    "TDLN Post-ICI3" = core_TDLN_Post,
+    "Spleen Post-ICI3" = core_Spleen_Post,
+    "Tumor Post-ICI3" = core_Tumor_Post
+  )
+)
+
+ggVennDiagram(
+  x = list(
+    "MLN Pre-ICI" = core_MLN_Pre,
+    "TDLN Pre-ICI" = core_TDLN_Pre,
+    "Spleen Pre-ICI" = core_Spleen_Pre,
+    "Tumor Pre-ICI" = core_Tumor_Pre
+  )
+)
 
 ggVennDiagram(x=list(core_MLN_Pre, core_MLN_Post))
 
