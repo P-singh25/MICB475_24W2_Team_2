@@ -22,19 +22,26 @@ sample_sums(pj2)
 
 pj2 <- prune_samples(sample_sums(pj2) > 0, pj2)
 
-pcoa_wu <- ordinate(pj2, method="PCoA", distance=wu_dm, correction="cailliez")
-
 wu_dm <- distance(pj2, method="wunifrac")
+
+pcoa_wu <- ordinate(pj2, method="PCoA", distance=wu_dm, correction="cailliez")
 
 plot_ordination(pj2, pcoa_wu, color = "location", shape="group")
 
-gg_pcoa <- plot_ordination(pj2, pcoa_wu, color = "location", shape="group") +
+wunifrac_facet <- plot_ordination(pj2, pcoa_wu, color = "location", shape="group") +
   facet_wrap(~ group) +  # Creates a separate plot for each group
+  #stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
   labs(pch="Treatment group", col="Organ") +
   theme_bw()
 
-gg_pcoa
+wunifrac_facet
 
+wunifrac_base <- plot_ordination(pj2, pcoa_wu, color = "location", shape="group") +
+  labs(pch="Treatment group", col="Organ") +
+  #stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
+  theme_bw()
+
+wunifrac_base
 
 
 # Bray curtis #
@@ -48,10 +55,17 @@ bc_dm <- distance(pj2, method="bray")  # Bray-Curtis distance
 pcoa_bray <- ordinate(pj2, method="PCoA", distance=bc_dm)
 plot_ordination(pj2, pcoa_bray, color = "location", shape="group")
 
-gg_pcoa <- plot_ordination(pj2, pcoa_bray, color = "location", shape = "group") +
+bcurtis_facet <- plot_ordination(pj2, pcoa_bray, color = "location", shape = "group") +
   facet_wrap(~ group) +  # Creates separate plots for each group
+  #stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
+  labs(pch="Treatment group", col="Organ") +
   theme_minimal()  # Optional: clean theme
 
-gg_pcoa
+bcurtis_facet
 
+bcurtis_base <- plot_ordination(pj2, pcoa_bray, color = "location", shape = "group") +
+  #stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
+  labs(pch="Treatment group", col="Organ") +
+  theme_minimal()  # Optional: clean theme
 
+bcurtis_base
