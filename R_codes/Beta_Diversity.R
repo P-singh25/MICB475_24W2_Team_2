@@ -35,12 +35,30 @@ pcoa_uu <- ordinate(pj2_filtered, method="PCoA", distance=uu_dm, correction="cai
 # Plot ordination
 plot_ordination(pj2_filtered, pcoa_uu, color = "location", shape="group")
 
+#make Pre-ICI the first in the plot
+sample_data(pj2_filtered)$group <- factor(sample_data(pj2_filtered)$group, 
+                                          levels = c("Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3"))
+
 # Faceted plot
-unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location", shape="group") +
+unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
   facet_wrap(~ group) +
   labs(pch="Treatment group", col="Organ") +
   theme_bw() +
   stat_ellipse(aes(group = location), level = 0.95, linetype = "solid")
+
+unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
+  facet_wrap(~ group, nrow = 1) +  # Single row layout
+  labs(pch = "Treatment group", col = "Organ") +
+  theme_bw() +
+  stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
+  coord_fixed(ratio = 1)
+
+unifrac_facet
+ggsave("Beta_Diversity_unweighted_unifrac.png")  # Adjust size if needed
+
+
+unifrac_facet
+ggsave("unifrac_facet.png", width = 12, height = 4)  # Adjust size if needed
 
 unifrac_facet
 ggsave("unifrac_facet.png")
