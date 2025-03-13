@@ -12,7 +12,8 @@ Taxa Bar Plot: all (top left), spleen (top right), all using another code (botto
 > <img src="../Spleen_Taxa_Bar.png" height="300">
 > <img src="../taxonomy_relative_abundance.png" height="300">
 
-Alpha Diversity
+Alpha Diversity 
+Using Faith PD
 > <img src="../Alpha_Diversity_Pretreatment.png" height="300">
 
 Beta Diversity
