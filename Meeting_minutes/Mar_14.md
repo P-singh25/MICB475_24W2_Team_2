@@ -23,7 +23,7 @@ Core Microbiome for Pre-ICI and Post-ICI3
 
 DEseq
 > <img src="../Deseq_all.png" height="300">
-> <img src="../Deseq_Spleen" height="300">
+> <img src="../Deseq_Spleen.png" height="300">
 
 #### For next meeting:
 
