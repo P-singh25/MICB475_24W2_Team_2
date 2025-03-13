@@ -7,9 +7,10 @@ Mar 14th, 2025
 
 - Attempted taxonomic bar plots, alpha diversity plots, beta diversity plots, core microbiome analysis, DEseq analysis
 
-Taxa Bar Plot: all (left), spleen (right)
+Taxa Bar Plot: all (left), spleen (middle), all using another code (right)
 > <img src="../Taxa_Bar.png" height="300">
 > <img src="../Spleen_Taxa_Bar.png" height="300">
+> <img src="../taxonomy_relative_abundance.png" height="300">
 
 Alpha Diversity
 > <img src="../Alpha_Diversity_Pretreatment.png" height="300">
