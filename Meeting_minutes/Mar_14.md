@@ -18,8 +18,8 @@ Beta Diversity
 > <img src="../Beta_Diversity_unweighted_unifrac.png" height="300">
 
 Core Microbiome for Pre-ICI and Post-ICI3
-> <img src="../Pre-ICI for all locations at 0.3 prevalance.png" height="300">
-> <img src="../Post-ICI3 for all locations at 0.3 prevalance.png" height="300">
+> <img src="../Pre-ICI for all locations at 0.3 prevelance.png" height="300">
+> <img src="../Post-ICI3 for all locations at 0.3 prevelance.png" height="300">
 
 DEseq
 > <img src="../Deseq_all.png" height="300">
