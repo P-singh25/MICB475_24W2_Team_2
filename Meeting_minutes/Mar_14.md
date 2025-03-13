@@ -35,10 +35,10 @@ Post-ICI3
 
 ### DEseq: 
 
-all 
+all
 > <img src="../Deseq_all.png" height="300">
 
-spleen only 
+spleen only (Test)
 > <img src="../Deseq_Spleen.png" height="300">
 
 #### For next meeting:
