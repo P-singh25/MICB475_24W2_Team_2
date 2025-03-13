@@ -21,7 +21,8 @@ To perform taxa bar plot for each location based on different time groups to det
 [Taxonomic Bar Plot code](../R_codes/Taxonomic_Bar_Plot_FINAL.R) 
    
 ## Results: 
-#### 
+Relative abundance (Phylym level) 
+
 
 
 
