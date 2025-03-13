@@ -48,6 +48,26 @@ for (loc in shannon_phylo_location) {
   #Tumor
     #Post-ICI1 vs Post-ICI2
 
+##Shanoon: Pre-Treatment ###
+pj2_mod_pre <- subset_samples(pj2_mod, group == "Pre-ICI")
+sample_data(pj2_mod_pre)
+
+shannon_diversity_pre <- estimate_richness(pj2_mod_pre, measures = c("Shannon")) #, "Simpson", "Chao1", "Observed"
+shannon_df_pre <- data.frame(sample_data(pj2_mod_pre), shannon_diversity_pre)
+
+ggplot(shannon_df_pre, aes(x = location, y = Shannon, fill = location)) + 
+  geom_boxplot(alpha = 0.7) + 
+  geom_jitter(width = 0.2, size = 1.5, alpha = 0.6) +  # Adds individual points
+  theme_minimal() + 
+  labs(title = "Shannon Diversity Across Locations", x = "Location", y = "Shannon Index") +
+  theme(
+    legend.position = "none",  
+    axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels
+  ) 
+
+##Shannon: Pre-Treatment Kruskall-Wallis ##
+kruskal.test(Shannon ~ location, data = shannon_df_pre)
+
 #### Observed Features ####
 observed_diversity <- estimate_richness(pj2_mod, measures = c("Observed"))
 observed_df <- data.frame(sample_data(pj2_mod), observed_diversity)
