@@ -22,10 +22,16 @@ To perform taxa bar plot for each location based on different time groups to det
    
 ## Results: 
 Relative abundance (Phylym level) 
-
-
+![Taxa Bar.png](../Taxa_Bar.png)
 
 
 ## Discussion:
+No significant difference in relative abundance of Phylum is observed. 
+
+The Phylum Firmicutes seems to be the most abundance Phylum across locations (except stool). 
+
+Post-ICI1 time group in general has a more diverse Phylum composition for the secondary lymphoid organs and tumors compared to their respective Pre-ICI time group. 
 
 ## Future direction:
+It may be interesting to look into the Firmicutes to look for commonly shared bacterial specices across different locations. 
+
