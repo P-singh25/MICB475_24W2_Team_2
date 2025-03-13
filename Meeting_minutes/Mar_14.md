@@ -7,7 +7,7 @@ Mar 14th, 2025
 
 - Attempted taxonomic bar plots, alpha diversity plots, beta diversity plots, core microbiome analysis, DEseq analysis
 
-Taxa Bar Plot
+Taxa Bar Plot: all (left), spleen (right)
 > <img src="../Taxa_Bar.png" height="300">
 > <img src="../Spleen_Taxa_Bar.png" height="300">
 
@@ -17,11 +17,11 @@ Alpha Diversity
 Beta Diversity
 > <img src="../Beta_Diversity_unweighted_unifrac.png" height="300">
 
-Core Microbiome for Pre-ICI and Post-ICI3
+Core Microbiome for Pre-ICI (top) and Post-ICI3 (bottom)
 > <img src="../Pre-ICI for all locations at 0.3 prevelance.png" height="300">
 > <img src="../Post-ICI3 for all locations at 0.3 prevelance.png" height="300">
 
-DEseq
+DEseq: all (top), spleen only (bottom)
 > <img src="../Deseq_all.png" height="300">
 > <img src="../Deseq_Spleen.png" height="300">
 
