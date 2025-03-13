@@ -18,7 +18,7 @@ To perform taxa bar plot for each location based on different time groups to det
 6. Use ggplot to plot the relative abundance plot (x = group, y = Relative_Abundance, fill = phylum, facet_wrap based on location)
 
 ## Code: 
-[Taxonomic Bar Plot code](../R_codes/"Taxonomic_Bar_Plot_FINAL.R") 
+[Taxonomic Bar Plot code](../R_codes/Taxonomic_Bar_Plot_FINAL.R) 
    
 ## Results: 
 #### 
