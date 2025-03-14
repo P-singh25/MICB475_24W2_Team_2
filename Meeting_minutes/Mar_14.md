@@ -107,5 +107,5 @@ spleen only (Test)
 - change x axis angle at 45 degree
 - Do it by organ not all
 - 40 is too significant, LOOK INTO THIS!!!
-- Tina question: different asv, can't assign to species, just leave as it is, just leave the level;** can blast veill vs veill.1 to compare **
+- Tina question: different asv, can't assign to species, just leave as it is, just leave the level; **can blast veill vs veill.1 to compare**
   
