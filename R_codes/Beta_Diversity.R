@@ -2,6 +2,8 @@ library(phyloseq)
 library(picante)
 library(tidyverse)
 library(ape)
+library(ggsci)
+library(scales)
 
 
 load("pj2.RData")
@@ -11,6 +13,10 @@ sample_data(pj2)
 
 ### filter data ###
 pj2_filtered <- subset_samples(pj2, location != "Stool" & group != "Day 0")
+
+sample_data(pj2_filtered)$location <- factor(sample_data(pj2_filtered)$location, 
+                                          levels = c("Spleen", "Tumor", "TDLN", "MLN"))  
+  
 
 #### Unweighted UniFrac ####
 # Compute unweighted UniFrac distance
@@ -47,11 +53,14 @@ unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
   stat_ellipse(aes(group = location), level = 0.95, linetype = "solid")
 
 unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
-  facet_wrap(~ group, nrow = 1) +  # Single row layout
-  labs(pch = "Treatment group", col = "Organ") +
+  facet_wrap(~ group, nrow = 2) +  # Single row layout
+  labs(pch = "Treatment group", col = "Location") +
   theme_bw() +
   stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
-  coord_fixed(ratio = 1)
+  coord_fixed(ratio = 1.2) +
+  scale_color_npg() +
+  theme(legend.title = element_text(hjust = 0.5))
+  
 
 unifrac_facet
 ggsave("Beta_Diversity_unweighted_unifrac.png")  # Adjust size if needed
