@@ -72,3 +72,33 @@ taxa_bar_plot <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +
   ) +  
   # scale_x_discrete(labels = c("Day 0", "Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3")) +  
   scale_y_continuous(labels = scales::percent_format())
+
+### reorder the phylum
+
+# Convert phyloseq object to a dataframe
+df <- psmelt(pj2_RA_grouped)
+
+# Reorder Phylum levels
+df$Phylum <- factor(df$Phylum, levels = c(setdiff(unique(df$Phylum), "Other"), "Other"))
+
+# Plot using the updated dataframe
+taxa_bar_plot <- ggplot(df, aes(x = group, y = Abundance, fill = Phylum)) +  
+  geom_bar(stat = "identity", position = "stack") +
+  theme_classic() +
+  facet_wrap(.~location, scales = "free", nrow = 1) +  
+  labs(
+    x = "ICI Treatment Group", 
+    y = "Relative Abundance", 
+    fill = "Phylum"
+  ) +  
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+    axis.text.y = element_text(size = 12),
+    strip.text = element_text(size = 12),
+    legend.title = element_text(size = 14, hjust = 0.5),
+    legend.text = element_text(size = 12), 
+    axis.line = element_line(size = 0),
+    strip.background = element_rect(color = "white", fill = "white", size = 1), 
+    panel.border = element_rect(color = "black", fill = NA)
+  ) +  
+  scale_y_continuous(labels = scales::percent_format())
