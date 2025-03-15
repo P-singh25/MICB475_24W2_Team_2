@@ -53,13 +53,19 @@ unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
   stat_ellipse(aes(group = location), level = 0.95, linetype = "solid")
 
 unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
-  facet_wrap(~ group, nrow = 2) +  # Single row layout
+  facet_wrap(~ group, nrow = 2, scales = "fixed") +  # Single row layout
   labs(pch = "Treatment group", col = "Location") +
-  theme_bw() +
+  theme_classic() +
   stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
   coord_fixed(ratio = 1.2) +
   scale_color_npg() +
-  theme(legend.title = element_text(hjust = 0.5))
+  theme(legend.title = element_text(hjust = 0.5), 
+        panel.border = element_rect(color = "black", fill = NA), 
+        axis.text.y = element_text(size = 10, angle = 0, color = "black"), 
+        axis.text.x = element_text(size = 10, angle = 0, color = "black"),
+        axis.line = element_line(size = 0),
+        strip.background = element_rect(color = "white", fill = "white", size = 1), 
+        strip.text = element_text(size = 10))
   
 
 unifrac_facet
@@ -67,7 +73,7 @@ ggsave("Beta_Diversity_unweighted_unifrac.png")  # Adjust size if needed
 
 
 unifrac_facet
-ggsave("unifrac_facet.png", width = 12, height = 4)  # Adjust size if needed
+ggsave("unifrac_facet.png", width = 5, height = 4)  # Adjust size if needed
 
 unifrac_facet
 ggsave("unifrac_facet.png")
