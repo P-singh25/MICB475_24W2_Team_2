@@ -1,12 +1,13 @@
+install.packages("ggsignif")
+install.packages("ggsci")  # If you haven't installed it
 library(phyloseq)
 library(picante)
 library(tidyverse)
-install.packages("ggsignif")
 library(ggsignif)
-
-install.packages("ggsci")  # If you haven't installed it
 library(ggsci)
 library(scales)
+library(reshape2)
+library(ggplot2)
 
 #### load phyloseq object ####
 load("pj2.RData")
@@ -43,8 +44,43 @@ for (loc in shannon_phylo_location) {
   lm_pd_vs_group_log <- lm(log(Shannon) ~ group, data=subset_data)
   anova_pd_vs_group_log <- aov(lm_pd_vs_group_log)
   summary(anova_pd_vs_group_log)
-  print(TukeyHSD(anova_pd_vs_group_log))
+  tukey <- TukeyHSD(anova_pd_vs_group_log)
+  print(tukey)
 }
+
+######Heatmap attempt ######
+tukey_df <- as.data.frame(tukey$group)
+tukey_df
+tukey_df$Comparison <- rownames(tukey_df)  # Add group comparisons
+colnames(tukey_df) <- c("diff", "lwr", "upr", "p_adj", "Comparison")
+
+# Extract only necessary columns
+p_value_df <- tukey_df[, c("Comparison", "p_adj")]
+
+# Add location column for tracking
+p_value_df$Location <- loc
+
+p_value_list <- list()
+
+# Store in list
+p_value_list[[loc]] <- p_value_df
+
+all_p_values <- do.call(rbind, p_value_list)
+
+all_p_values
+
+heatmap <- ggplot(all_p_values, aes(x = Location, y = p_adj, fill = p_adj)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "blue", high = "red", na.value = "white") +  
+  labs(title = "Heatmap of ANOVA P-values",
+       x = "Location",
+       y = "",
+       fill = "P-value") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_blank())
+heatmap
+
 #Shannon: Significant groups
 #Spleen
 #Pre-ICI vs Post-ICI2, p<0.007
@@ -62,13 +98,15 @@ plot.pd_spleen_Shannon <- ggplot(sample_data(shannon_df_0_spleen), aes(x = group
   xlab("Group") +
   ylab("Shannon Index") +
   theme_classic()+
-  geom_signif(comparisons = list(c("Pre-ICI","Post-ICI2"), c("Pre-ICI", "Post-ICI3")),
-              y_position = c(4.1, 3.7),
-              annotations = c("p<0.007","p<0.008")) +
+  geom_signif(comparisons = list(c("Pre-ICI","Post-ICI1"), c("Pre-ICI","Post-ICI2"), c("Pre-ICI", "Post-ICI3")),
+              y_position = c(4.5, 4.1, 3.7),
+              annotations = c("ns","p<0.007","p<0.008")) +
   scale_fill_npg(name = "group") +
+  theme(legend.position = "none") +
   expand_limits(y = 4.5) +
   scale_y_continuous(breaks = seq(0, 10, by = 2), 
                      labels = c("0", "2", "4", "6", "8", "10")) +
+  scale_fill_brewer(palette = "Set2", name = "group") +
   theme(axis.text.y = element_text(size = 10, angle = 0, color = "black"), 
         axis.text.x = element_text(size = 10, angle = 0, color = "black")) 
 plot.pd_spleen_Shannon
@@ -85,13 +123,15 @@ plot.pd_tumor_Shannon <- ggplot(sample_data(shannon_df_0_tumor), aes(x = group, 
   xlab("Group") +
   ylab("Shannon Index") +
   theme_classic()+
-  geom_signif(comparisons = list(c("Post-ICI1","Post-ICI3")),
-              y_position = c(4),
-              annotations = c("p<0.01")) +
+  geom_signif(comparisons = list(c("Pre-ICI","Post-ICI1"), c("Pre-ICI","Post-ICI2"), c("Pre-ICI", "Post-ICI3")),
+              y_position = c(4.3, 4.1, 3.9),
+              annotations = c("ns","ns","ns")) +
   scale_fill_npg(name = "group") +
+  theme(legend.position = "none") +
   expand_limits(y = 4.5) +
   scale_y_continuous(breaks = seq(0, 10, by = 2), 
                      labels = c("0", "2", "4", "6", "8", "10")) +
+  scale_fill_brewer(palette = "Set2", name = "group") +
   theme(axis.text.y = element_text(size = 10, angle = 0, color = "black"), 
         axis.text.x = element_text(size = 10, angle = 0, color = "black")) 
 plot.pd_tumor_Shannon
@@ -108,10 +148,12 @@ plot.pd_TDLN_Shannon <- ggplot(sample_data(shannon_df_0_TDLN), aes(x = group, y 
   xlab("Group") +
   ylab("Shannon Index") +
   theme_classic()+
+  theme(legend.position = "none") +
   scale_fill_npg(name = "group") +
   expand_limits(y = 4.5) +
   scale_y_continuous(breaks = seq(0, 10, by = 2), 
                      labels = c("0", "2", "4", "6", "8", "10")) +
+  scale_fill_brewer(palette = "Set2", name = "group") +
   theme(axis.text.y = element_text(size = 10, angle = 0, color = "black"), 
         axis.text.x = element_text(size = 10, angle = 0, color = "black")) 
 plot.pd_TDLN_Shannon
@@ -129,6 +171,8 @@ plot.pd_MLN_Shannon <- ggplot(sample_data(shannon_df_0_MLN), aes(x = group, y = 
   theme_classic()+
   scale_fill_npg(name = "group") +
   expand_limits(y = 4.5) +
+  theme(legend.position = "none") +
+  scale_fill_brewer(palette = "Set2", name = "group") +
   scale_y_continuous(breaks = seq(0, 10, by = 2), 
                      labels = c("0", "2", "4", "6", "8", "10")) +
   theme(axis.text.y = element_text(size = 10, angle = 0, color = "black"), 
@@ -165,31 +209,42 @@ anova_test <- aov(log(Shannon) ~ location, data = shannon_df_0_pre)
 summary(anova_test)
 tukey_test <- TukeyHSD(anova_test)
 print(tukey_test)
-
 #Spleen_MLN, p<0.000009
 #TDLN_Spleen, p<0.00005
 #Tumor_Spleen, p<0.0002
 
+tukey_p_values <- tukey_test$location[, "p adj"]  # Extract adjusted p-values
+
+## Apply FDR correction ##
+fdr_adjusted_p <- p.adjust(tukey_p_values, method = "BH")
+fdr_adjusted_p
+# False Discovery Rate
+  #Spleen_MLN, p<0.00006
+  #TDLN_Spleen, p<0.0002
+  #Tumor_Spleen, p<0.0003
+
+
 #Plot with p value##
 shannon_df_0_pre$location <- factor(shannon_df_0_pre$location, levels = c("Spleen", "Tumor", "TDLN", "MLN"))
-plot.pd_pre_Shannon <- ggplot(sample_data(shannon_df_pre), aes(x = location, y = Shannon)) + 
+plot.pd_pre_Shannon <- ggplot(sample_data(shannon_df_0_pre), aes(x = location, y = Shannon)) + 
   geom_boxplot(aes(fill = location)) +
   geom_point() +
   xlab("Location") +
   ylab("Shannon Index") +
   theme_classic()+
   geom_signif(comparisons = list(c("Tumor","Spleen"), c("TDLN", "Spleen"), c("Spleen","MLN")),
-              y_position = c(4.5, 4.1, 3.7),
-              annotations = c("p<0.0002","p<0.00005","p<0.000009")) +
+              y_position = c(4.7, 4.3, 3.9),
+              annotations = c("p<0.0003","p<0.0002","p<0.00006")) +
   scale_fill_npg(name = "Location") +
   expand_limits(y = 5) +
+  theme(legend.position = "none") +
   scale_y_continuous(breaks = seq(0, 10, by = 2), 
                      labels = c("0", "2", "4", "6", "8", "10")) +
   theme(axis.text.y = element_text(size = 10, angle = 0, color = "black"), 
         axis.text.x = element_text(size = 10, angle = 0, color = "black")) 
 plot.pd_pre_Shannon
 
-ggsave(("Alpha_Diversity_Pretreatment_Shannon.png"), plot.pd_pre_Shannon, width = 6, height = 3.5)
+ggsave(("Alpha_Diversity_Shannon_Pre-ICI.png"), plot.pd_pre_Shannon, width = 6, height = 3.5)
 
 ############
 ##Shannon: Post-ICI1 ##
@@ -214,28 +269,35 @@ print(tukey_test_post1)
 #TDLN_Spleen, p<0.54
 #Tumor_Spleen, p<0.22
 
+tukey_p_values_post1 <- tukey_test_post1$location[, "p adj"]  # Extract adjusted p-values
+
+## Apply FDR correction ##
+fdr_adjusted_post1 <- p.adjust(tukey_p_values_post1, method = "BH")
+fdr_adjusted_post1
+
 #Plot with p value##
 shannon_df_0_post1$location <- factor(shannon_df_0_post1$location, levels = c("Spleen", "Tumor", "TDLN", "MLN"))
-plot.pd_post1_Shannon <- ggplot(sample_data(shannon_df_post1), aes(x = location, y = Shannon)) + 
+plot.pd_post1_Shannon <- ggplot(sample_data(shannon_df_0_post1), aes(x = location, y = Shannon)) + 
   geom_boxplot(aes(fill = location)) +
   geom_point() +
   xlab("Location") +
   ylab("Shannon Index") +
   theme_classic()+
   geom_signif(comparisons = list(c("Tumor","Spleen"), c("TDLN", "Spleen"), c("Spleen","MLN")),
-              y_position = c(4.8, 4.3, 3.9),
-              annotations = c("p<0.22","p<0.54","p<0.55")) +
+              y_position = c(4.7, 4.3, 3.9),
+              annotations = c("ns","ns","ns")) +
   scale_fill_npg(name = "Location") +
   expand_limits(y = 5.3) +
+  theme(legend.position = "none") +
   scale_y_continuous(breaks = seq(0, 10, by = 2), 
                      labels = c("0", "2", "4", "6", "8", "10")) +
   theme(axis.text.y = element_text(size = 10, angle = 0, color = "black"), 
         axis.text.x = element_text(size = 10, angle = 0, color = "black")) 
 plot.pd_post1_Shannon
 
-ggsave(("Alpha_Diversity_Pretreatment_Shannon_Post-ICI1.png"), plot.pd_post1_Shannon, width = 6, height = 3.5)
+ggsave(("Alpha_Diversity_Shannon_Post-ICI1.png"), plot.pd_post1_Shannon, width = 6, height = 3.5)
 
-#############
+
 ##Shannon: Post-ICI2 ##
 pj2_mod_post2 <- subset_samples(pj2_mod, group == "Post-ICI2")
 sample_data(pj2_mod_post2)
@@ -254,6 +316,12 @@ summary(anova_test_post2)
 tukey_test_post2 <- TukeyHSD(anova_test_post2)
 print(tukey_test_post2)
 
+tukey_p_values_post2 <- tukey_test_post2$location[, "p adj"]  # Extract adjusted p-values
+
+## Apply FDR correction ##
+fdr_adjusted_post2 <- p.adjust(tukey_p_values_post2, method = "BH")
+fdr_adjusted_post2
+
 #Spleen_MLN, p<0.26
 #TDLN_Spleen, p<0.44
 #Tumor_Spleen, p<0.18
@@ -267,9 +335,10 @@ plot.pd_post2_Shannon <- ggplot(sample_data(shannon_df_0_post2), aes(x = locatio
   ylab("Shannon Index") +
   theme_classic()+
   geom_signif(comparisons = list(c("Tumor","Spleen"), c("TDLN", "Spleen"), c("Spleen","MLN")),
-              y_position = c(4.8, 4.3, 3.9),
-              annotations = c("p<0.18","p<0.44","p<0.26")) +
+              y_position = c(4.7, 4.3, 3.9),
+              annotations = c("ns","ns","ns")) +
   scale_fill_npg(name = "Location") +
+  theme(legend.position = "none") +
   expand_limits(y = 5.3) +
   scale_y_continuous(breaks = seq(0, 10, by = 2), 
                      labels = c("0", "2", "4", "6", "8", "10")) +
@@ -277,7 +346,7 @@ plot.pd_post2_Shannon <- ggplot(sample_data(shannon_df_0_post2), aes(x = locatio
         axis.text.x = element_text(size = 10, angle = 0, color = "black")) 
 plot.pd_post2_Shannon
 
-ggsave(("Alpha_Diversity_Pretreatment_Shannon_Post-ICI2.png"), plot.pd_post2_Shannon, width = 6, height = 3.5)
+ggsave(("Alpha_Diversity_Shannon_Post-ICI2.png"), plot.pd_post2_Shannon, width = 6, height = 3.5)
 
 
 
@@ -304,6 +373,12 @@ print(tukey_test_post)
 #TDLN_Spleen, p<0.62
 #Tumor_Spleen, p<0.20
 
+tukey_p_values_post3 <- tukey_test_post$location[, "p adj"]  # Extract adjusted p-values
+
+## Apply FDR correction ##
+fdr_adjusted_post3 <- p.adjust(tukey_p_values_post3, method = "BH")
+fdr_adjusted_post3
+
 #Plot with p value##
 shannon_df_0_post$location <- factor(shannon_df_0_post$location, levels = c("Spleen", "Tumor", "TDLN", "MLN"))
 plot.pd_post_Shannon <- ggplot(sample_data(shannon_df_0_post), aes(x = location, y = Shannon)) + 
@@ -313,9 +388,10 @@ plot.pd_post_Shannon <- ggplot(sample_data(shannon_df_0_post), aes(x = location,
   ylab("Shannon Index") +
   theme_classic()+
   geom_signif(comparisons = list(c("Tumor","Spleen"), c("TDLN", "Spleen"), c("Spleen","MLN")),
-              y_position = c(4.8, 4.3, 3.9),
-              annotations = c("p<0.20","p<0.62","p<0.96")) +
+              y_position = c(4.7, 4.3, 3.9),
+              annotations = c("ns","ns","ns")) +
   scale_fill_npg(name = "Location") +
+  theme(legend.position = "none") +
   expand_limits(y = 5.3) +
   scale_y_continuous(breaks = seq(0, 10, by = 2), 
                      labels = c("0", "2", "4", "6", "8", "10")) +
@@ -323,7 +399,4 @@ plot.pd_post_Shannon <- ggplot(sample_data(shannon_df_0_post), aes(x = location,
         axis.text.x = element_text(size = 10, angle = 0, color = "black")) 
 plot.pd_post_Shannon
 
-ggsave(("Alpha_Diversity_Pretreatment_Shannon_Post-ICI3.png"), plot.pd_post_Shannon, width = 6, height = 3.5)
-
-
-
+ggsave(("Alpha_Diversity_Shannon_Post-ICI3.png"), plot.pd_post_Shannon, width = 6, height = 3.5)
