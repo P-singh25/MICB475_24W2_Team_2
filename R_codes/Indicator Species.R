@@ -4,7 +4,7 @@ library(phyloseq)
 library(indicspecies)
 
 #### Load data ####
-load("../pj2.RData")
+load("pj2.RData")
 
 #### Indicator Species/Taxa Analysis ####
 # glom to Genus
@@ -26,6 +26,6 @@ taxtable <- tax_table(pj2) %>% as.data.frame() %>% rownames_to_column(var="ASV")
 isa_results <- pj2_is$sign %>%
   rownames_to_column(var="ASV") %>%
   left_join(taxtable) %>%
-  filter(p.value<0.05) %>% View()
+  filter(p.value<0.05)
 
-write.csv(isa_results, "indicator_species_results.csv", row.names = TRUE)
+write.csv(isa_results, "indicator_species.csv", row.names = FALSE)
