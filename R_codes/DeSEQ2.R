@@ -141,7 +141,8 @@ sigASVs_tumor_post1 <- tax_table(tumor_post1_DESeq) %>% as.data.frame() %>%
   right_join(sigASVs_tumor_post1) %>%
   arrange(log2FoldChange) %>%
   mutate(Genus = make.unique(Genus)) %>%
-  mutate(Genus = factor(Genus, levels=unique(Genus)))
+  mutate(Genus = factor(Genus, levels=unique(Genus))) %>%
+  filter(Genus != "NA")
 
 deseq_tumor_post1_plot <- ggplot(sigASVs_tumor_post1) +
   geom_bar(aes(x=Genus, y=log2FoldChange, fill = Phylum), stat="identity")+
