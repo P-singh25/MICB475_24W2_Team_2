@@ -49,7 +49,6 @@ sample_data(pj2_RA_grouped)$group <- factor(
 
 sample_data(pj2_RA_grouped)$location <- factor(sample_data(pj2_RA_grouped)$location, levels = c("Spleen", "Tumor","TDLN", "MLN"))
 
-
 # Step 8: Generate the Taxonomic Bar Plot
 taxa_bar_plot <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +  
   theme_classic() +
