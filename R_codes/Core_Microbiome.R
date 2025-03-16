@@ -59,10 +59,10 @@ tax_table(shared_physeq_post)
 # Plot the venn diagram
 core_all_post_ICI3 <- ggVennDiagram(
   x = list(
-    "MLN Post-ICI3" = core_MLN_Post,
-    "TDLN Post-ICI3" = core_TDLN_Post,
-    "Spleen Post-ICI3" = core_Spleen_Post,
-    "Tumor Post-ICI3" = core_Tumor_Post
+    "MLN" = core_MLN_Post,
+    "TDLN" = core_TDLN_Post,
+    "Spleen" = core_Spleen_Post,
+    "Tumor" = core_Tumor_Post
   )
 )
 core_all_post_ICI3
@@ -84,10 +84,10 @@ tax_table(shared_physeq_pre)
 # Plot the venn diagram
 core_all_pre_ICI <- ggVennDiagram(
   x = list(
-    "MLN Pre-ICI" = core_MLN_Pre,
-    "TDLN Pre-ICI" = core_TDLN_Pre,
-    "Spleen Pre-ICI" = core_Spleen_Pre,
-    "Tumor Pre-ICI" = core_Tumor_Pre
+    "MLN" = core_MLN_Pre,
+    "TDLN" = core_TDLN_Pre,
+    "Spleen" = core_Spleen_Pre,
+    "Tumor" = core_Tumor_Pre
   )
 )
 core_all_pre_ICI
