@@ -31,7 +31,7 @@ library(ggprism)
 library(patchwork)
 library(DESeq2)
 library(ggh4x)
-
+library(dplyr)
 
 
 ##### Import files and preparing tables #####
@@ -52,21 +52,29 @@ filtered_metadata <- metadata %>%
 # Save the filtered metadata to as a new file
 write_delim(filtered_metadata, "PiCRUST2/filtered_metadata_for_picrust.tsv", delim = "\t")
 
-#Removing samples with no data(0) in the abundance data
-abundance_data_1 =  abundance_data[, colSums(abundance_data != 0) > 0]
+#Filtering the abundance table to only include samples that are in the filtered metadata
+sample_names = metadata$'sample-id'
+sample_names = append(sample_names, "#OTU ID")
+abundance_data_filtered = abundance_data[, colnames(abundance_data) %in% sample_names] #This step is the actual filtering
+
+#Removing individuals with no data that caused a problem for pathways_daa()
+abundance_data_filtered =  abundance_data_filtered[, colSums(abundance_data_filtered != 0) > 0]
 
 #Ensuring the rownames for the abundance_data_filtered is empty. This is required for their functions to run.
-rownames(abundance_data_1) = NULL
+rownames(abundance_data_filtered) = NULL
 
 #verify samples in metadata match samples in abundance_data
-abun_samples = rownames(t(abundance_data_1[,-1])) #Getting a list of the sample names in the newly filtered abundance data
+abun_samples = rownames(t(abundance_data_filtered[,-1])) #Getting a list of the sample names in the newly filtered abundance data
 metadata = filtered_metadata[filtered_metadata$`sample-id` %in% abun_samples,] #making sure the filtered metadata only includes these samples
 
+colnames(abundance_data_filtered)[colnames(abundance_data_filtered) == "#OTU ID"] <- "sample-id"
 
 #### DESEq ####
 #Perform pathway DAA using DESEQ2 method
-abundance_daa_results_df <- pathway_daa(abundance = abundance_data_1 %>% rownames_to_column("#OTU ID"), 
+abundance_daa_results_df <- pathway_daa(abundance = abundance_data_filtered %>% column_to_rownames("sample-id"), 
                                         metadata = metadata, group = "group", daa_method = "DESeq2")
+
+# ------------------------------------------------------------------------ not edited beyond this -----------------------------------------------------------
 
 # Annotate MetaCyc pathway so they are more descriptive
 metacyc_daa_annotated_results_df <- pathway_annotation(pathway = "MetaCyc", 

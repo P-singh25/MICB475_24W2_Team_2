@@ -68,7 +68,7 @@ core_all_post_ICI3 <- ggVennDiagram(
 core_all_post_ICI3
 
 # Save the venn diagram
-ggsave(("Post-ICI3 for all locations at 0.3 prevelance.png"), core_all_post_ICI3, width = 6, height = 3.5)
+ggsave(("Core_microbiome_postICI3.png"), core_all_post_ICI3, width = 10, height = 10)
 
 
 ########## Pre ICI ############
@@ -93,7 +93,7 @@ core_all_pre_ICI <- ggVennDiagram(
 core_all_pre_ICI
 
 # Save the venn diagram
-ggsave(("Pre-ICI for all locations at 0.3 prevelance.png"), core_all_pre_ICI, width = 6, height = 3.5)
+ggsave(("Core_microbiome_preICI.png"), core_all_pre_ICI, width = 12, height = 10)
 
 
 
