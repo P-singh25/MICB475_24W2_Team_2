@@ -72,6 +72,18 @@ taxa_bar_plot <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +
   # scale_x_discrete(labels = c("Day 0", "Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3")) +  
   scale_y_continuous(labels = scales::percent_format())
 
+taxa_bar_plot
+ggsave("Taxa_plot_final.png")
+
+
+
+
+
+
+
+
+
+
 ### reorder the phylum
 
 # Convert phyloseq object to a dataframe
