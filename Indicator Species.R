@@ -23,7 +23,9 @@ taxtable <- tax_table(pj2) %>% as.data.frame() %>% rownames_to_column(var="ASV")
 
 # consider that your table is only going to be resolved up to the genus level, be wary of 
 # anything beyond the glomed taxa level
-pj2_is$sign %>%
+isa_results <- pj2_is$sign %>%
   rownames_to_column(var="ASV") %>%
   left_join(taxtable) %>%
   filter(p.value<0.05) %>% View()
+
+write.csv(isa_results, "indicator_species_results.csv", row.names = TRUE)
