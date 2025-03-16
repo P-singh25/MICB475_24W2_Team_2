@@ -4,7 +4,7 @@ library(phyloseq)
 library(indicspecies)
 
 #### Load data ####
-load("pj2.RData")
+load("../pj2.RData")
 
 #### Indicator Species/Taxa Analysis ####
 # glom to Genus
