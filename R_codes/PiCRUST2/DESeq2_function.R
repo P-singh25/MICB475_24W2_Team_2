@@ -6,7 +6,7 @@ DEseq2_function = function(abundance_table,metadata,col_of_interest){
   
   
   DESeq2_metadata <- metadata
-  DESeq2_abundance_mat <- abundance_table %>% column_to_rownames("pathway")
+  DESeq2_abundance_mat <- abundance_table %>% column_to_rownames("sample-id")
   
   
   DESeq2_colnames <- colnames(DESeq2_metadata)
