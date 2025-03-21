@@ -14,4 +14,7 @@ Questions:
 
 ## Meeting Minutes
 
-- 
+Beta
+- use Eclipse is good enough
+- as long as eclipse doesn't overlap
+- can keep the dots
