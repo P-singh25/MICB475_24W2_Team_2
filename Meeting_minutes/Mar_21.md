@@ -4,5 +4,14 @@ Team 2 - QingRu Kong, Pranjali Singh, Ran Tao, Tina Wang, Zurui Zhu
 Mar 21st, 2025
 
 ## Agenda
-Question:
-1. How to 
+
+Questions:
+1. How to generate a PCA plot - troubleshoot the code?
+2. How to fix the visual of beta diversity - the dots appear too big.
+3. How do we visualize Indicator species analysis data and interpret it?
+- Look at the edited versions of all our figures.
+
+
+## Meeting Minutes
+
+- 
