@@ -1,4 +1,4 @@
-sample-id	location	day	mouse_id	group
+sample_id	location	day	mouse_id	group
 SRR22283599	Spleen	Day 4	Mouse 4	Pre-ICI
 SRR22283600	Spleen	Day 4	Mouse 3	Pre-ICI
 SRR22283601	Spleen	Day 4	Mouse 2	Pre-ICI
