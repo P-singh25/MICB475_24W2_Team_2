@@ -89,16 +89,18 @@ unifrac_base <- plot_ordination(pj2_filtered, pcoa_uu, color = "location", shape
 
 unifrac_base
 
-# Significance>?
+# Significance for post-ici3
 pj2_group <- subset_samples(pj2_filtered, group == "Post-ICI3")
 meta_data_group <- as(sample_data(pj2_group),"data.frame")
 uu_dm_group <- distance(pj2_group, method = "unifrac")
 perm_results_post3 <- adonis2(uu_dm_group ~ location, data = meta_data_group, permutations = 999)
 print(perm_results_post3)
 
-
-
-
+pj2_group_1 <- subset_samples(pj2_filtered, group == "Pre-ICI")
+meta_data_group <- as(sample_data(pj2_group_1),"data.frame")
+uu_dm_group <- distance(pj2_group_1, method = "unifrac")
+perm_results_pre <- adonis2(uu_dm_group ~ location, data = meta_data_group, permutations = 999)
+print(perm_results_pre)
 
 # Weight Unifrac #
 wu_dm <- distance(pj2, method="wunifrac")
