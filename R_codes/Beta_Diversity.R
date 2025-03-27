@@ -46,26 +46,29 @@ sample_data(pj2_filtered)$group <- factor(sample_data(pj2_filtered)$group,
                                           levels = c("Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3"))
 
 # Faceted plot
-unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
-  facet_wrap(~ group) +
-  labs(pch="Treatment group", col="Organ") +
-  theme_bw() +
-  stat_ellipse(aes(group = location), level = 0.95, linetype = "solid")
+# unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
+#   facet_wrap(~ group) +
+#   labs(pch="Treatment group", col="Organ") +
+#   theme_bw() +
+#   stat_ellipse(aes(group = location), level = 0.95, linetype = "solid")
 
 unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
   facet_wrap(~ group, nrow = 2, scales = "fixed") +  # Single row layout
   labs(pch = "Treatment group", col = "Location") +
   theme_classic() +
-  stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
+  stat_ellipse(aes(group = location), level = 0.8, linetype = "solid") +
   coord_fixed(ratio = 1.2) +
   scale_color_npg() +
-  theme(legend.title = element_text(hjust = 0.5), 
-        panel.border = element_rect(color = "black", fill = NA), 
-        axis.text.y = element_text(size = 10, angle = 0, color = "black"), 
-        axis.text.x = element_text(size = 10, angle = 0, color = "black"),
+  theme(legend.title = element_text(size = 14, hjust = 0.5), 
+        panel.border = element_rect(color = "black", fill = NA),
+        axis.text.y = element_text(size = 12, angle = 0, color = "black"),
+        axis.text.x = element_text(size = 12, angle = 0, color = "black"),
         axis.line = element_line(size = 0),
-        strip.background = element_rect(color = "white", fill = "white", size = 1), 
-        strip.text = element_text(size = 10))
+        strip.background = element_rect(color = "white", fill = "white", size = 1),
+        strip.text = element_text(size = 14),
+        legend.text = element_text(size = 12))
+
+
   
 
 unifrac_facet
@@ -73,7 +76,7 @@ ggsave("Beta_Diversity_unweighted_unifrac.png")  # Adjust size if needed
 
 
 unifrac_facet
-ggsave("unifrac_facet.png", width = 5, height = 4)  # Adjust size if needed
+ggsave("unifrac_facet.png", width = 10, height = 8)  # Adjust size if needed
 
 unifrac_facet
 ggsave("unifrac_facet.png")

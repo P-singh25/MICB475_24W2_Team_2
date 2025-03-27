@@ -8,81 +8,239 @@ load("pj2.RData")
 
 #### DESeq for spleen ####
 pj2_spleen <- pj2 %>%
-  subset_samples(location == "Spleen")
+  subset_samples(location == "Spleen") %>%
+  subset_samples(group != "Day0")
 
 pj2_deseq_spleen <- phyloseq_to_deseq2(pj2_spleen, ~`group`)
 DESEQ_pj2_spleen <- DESeq(pj2_deseq_spleen)
-
-res <- results(DESEQ_pj2_spleen, tidy=TRUE, contrast = c("group", "Post-ICI1", "Pre-ICI"))
+res_spleen_post1 <- results(DESEQ_pj2_spleen, tidy=TRUE, 
+                            contrast = c("group", "Post-ICI1", "Pre-ICI"))
+View(res_spleen_post1)
 
 # To get table of results
-sigASVs <- res %>% 
-  filter(padj<0.05 & log2FoldChange>2) %>%
+sigASVs_spleen_post1 <- res_spleen_post1 %>% 
+  filter(padj<0.01 & abs(log2FoldChange)>2) %>%
   dplyr::rename(ASV=row)
 
 # Get only asv names
-sigASVs_vec <- sigASVs %>%
+sigASVs_name_spleen_post1 <- sigASVs_spleen_post1 %>%
   pull(ASV)
 
 # Prune phyloseq file
-mpt_DESeq <- prune_taxa(sigASVs_vec,pj2_spleen)
+spleen_post1_DESeq <- prune_taxa(sigASVs_name_spleen_post1, pj2_spleen)
 
-sigASVs <- tax_table(mpt_DESeq) %>% as.data.frame() %>%
+sigASVs_spleen_post1 <- tax_table(spleen_post1_DESeq) %>% as.data.frame() %>%
   rownames_to_column(var="ASV") %>%
-  right_join(sigASVs) %>%
+  right_join(sigASVs_spleen_post1) %>%
   arrange(log2FoldChange) %>%
   mutate(Genus = make.unique(Genus)) %>%
   mutate(Genus = factor(Genus, levels=unique(Genus)))
 
-deseq_spleen_plot <- ggplot(sigASVs) +
-  geom_bar(aes(x=Genus, y=log2FoldChange), stat="identity")+
-  geom_errorbar(aes(x=Genus, ymin=log2FoldChange-lfcSE, ymax=log2FoldChange+lfcSE)) +
-  theme(axis.text.x = element_text(angle=90, hjust=1, vjust=0.5))
+deseq_spleen_post1_plot <- ggplot(sigASVs_spleen_post1) +
+  geom_bar(aes(x=Genus, y=log2FoldChange, fill = Phylum), stat="identity")+
+  # geom_errorbar(aes(x=Genus, ymin=log2FoldChange-lfcSE, ymax=log2FoldChange+lfcSE), size = 0.5, width = 0.5)  +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45, vjust = 1, hjust = 1, color = "black"), 
+        axis.text.y = element_text(color = "black"))
 
-ggsave("Deseq_Spleen.png", deseq_spleen_plot, width = 6, height = 3.5)
+ggsave("Deseq_Spleen_prevspost1.png", deseq_spleen_post1_plot, width = 6, height = 3.5)
 
-#### all locations ####
-pj2_all <- pj2 %>%
-  subset_samples(location != "Stool")
-
-## zero errors occur 
-## pj2_deseq_all <- phyloseq_to_deseq2(pj2_all, ~`group`)
-## DESEQ_pj2_all <- DESeq(pj2_deseq_all)
-
-pj2_plus1 <- transform_sample_counts(pj2_all, function(x) x+1)
-pj2_all_deseq <- phyloseq_to_deseq2(pj2_plus1, ~`group`)
-DESEQ_mpt <- DESeq(pj2_all_deseq)
-res_all <- results(DESEQ_mpt, tidy=TRUE, 
-               #this will ensure that No is your reference group
-               contrast = c("group", "Post-ICI1", "Pre-ICI")) 
+#### Spleen post 2 ####
+res_spleen_post2 <- results(DESEQ_pj2_spleen, tidy=TRUE, 
+                            contrast = c("group", "Post-ICI2", "Pre-ICI"))
 
 # To get table of results
-sigASVs_all <- res_all %>% 
-  filter(padj<0.01 & log2FoldChange>4) %>%
-  filter(!is.na(padj))%>%
+sigASVs_spleen_post2 <- res_spleen_post2 %>% 
+  filter(padj<0.01 & abs(log2FoldChange)>2) %>%
   dplyr::rename(ASV=row)
 
 # Get only asv names
-sigASVs_vec_all <- sigASVs_all %>%
+sigASVs_name_spleen_post2 <- sigASVs_spleen_post2 %>%
   pull(ASV)
 
 # Prune phyloseq file
-pj2_all_DESeq <- prune_taxa(sigASVs_vec_all,pj2_all)
+spleen_post2_DESeq <- prune_taxa(sigASVs_name_spleen_post2, pj2_spleen)
 
-sigASVs_all <- tax_table(pj2_all_DESeq) %>% as.data.frame() %>%
+sigASVs_spleen_post2 <- tax_table(spleen_post2_DESeq) %>% as.data.frame() %>%
   rownames_to_column(var="ASV") %>%
-  right_join(sigASVs_all) %>%
+  right_join(sigASVs_spleen_post2) %>%
+  arrange(log2FoldChange) %>%
+  mutate(Genus = make.unique(Genus)) %>%
+  mutate(Genus = factor(Genus, levels=unique(Genus)))
+
+deseq_spleen_post2_plot <- ggplot(sigASVs_spleen_post2) +
+  geom_bar(aes(x=Genus, y=log2FoldChange, fill = Phylum), stat="identity")+
+  # geom_errorbar(aes(x=Genus, ymin=log2FoldChange-lfcSE, ymax=log2FoldChange+lfcSE), size = 0.5, width = 0.5)  +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45, vjust = 1, hjust = 1, color = "black"), 
+        axis.text.y = element_text(color = "black"))
+
+ggsave("Deseq_Spleen_prevspost2.png", deseq_spleen_post2_plot, width = 6, height = 3.5)
+
+
+#### spleen post 3 ####
+res_spleen_post3 <- results(DESEQ_pj2_spleen, tidy=TRUE, 
+                            contrast = c("group", "Post-ICI3", "Pre-ICI"))
+
+# To get table of results
+sigASVs_spleen_post3 <- res_spleen_post3 %>% 
+  filter(padj<0.01 & abs(log2FoldChange)>2) %>%
+  dplyr::rename(ASV=row)
+
+# Get only asv names
+sigASVs_name_spleen_post3 <- sigASVs_spleen_post3 %>%
+  pull(ASV)
+
+# Prune phyloseq file
+spleen_post3_DESeq <- prune_taxa(sigASVs_name_spleen_post3, pj2_spleen)
+
+sigASVs_spleen_post3 <- tax_table(spleen_post3_DESeq) %>% as.data.frame() %>%
+  rownames_to_column(var="ASV") %>%
+  right_join(sigASVs_spleen_post3) %>%
+  arrange(log2FoldChange) %>%
+  mutate(Genus = make.unique(Genus)) %>%
+  mutate(Genus = factor(Genus, levels=unique(Genus)))
+
+deseq_spleen_post3_plot <- ggplot(sigASVs_spleen_post3) +
+  geom_bar(aes(x=Genus, y=log2FoldChange, fill = Phylum), stat="identity")+
+  # geom_errorbar(aes(x=Genus, ymin=log2FoldChange-lfcSE, ymax=log2FoldChange+lfcSE), size = 0.5, width = 0.5)  +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45, vjust = 1, hjust = 1, color = "black"), 
+        axis.text.y = element_text(color = "black"))
+
+ggsave("Deseq_Spleen_prevspost3.png", deseq_spleen_post3_plot, width = 6, height = 3.5)
+
+
+
+
+
+#### tumor post 1 ####
+pj2_tumor <- pj2 %>%
+  subset_samples(location == "Tumor") %>%
+  subset_samples(group != "Day0")
+
+pj2_deseq_tumor <- phyloseq_to_deseq2(pj2_tumor, ~`group`)
+DESEQ_pj2_tumor <- DESeq(pj2_deseq_tumor)
+res_tumor_post1 <- results(DESEQ_pj2_tumor, tidy=TRUE, 
+                            contrast = c("group", "Post-ICI1", "Pre-ICI"))
+
+# To get table of results
+sigASVs_tumor_post1 <- res_tumor_post1 %>% 
+  filter(padj<0.01 & abs(log2FoldChange)>2) %>%
+  dplyr::rename(ASV=row)
+
+# Get only asv names
+sigASVs_name_tumor_post1 <- sigASVs_tumor_post1 %>%
+  pull(ASV)
+
+# Prune phyloseq file
+tumor_post1_DESeq <- prune_taxa(sigASVs_name_tumor_post1, pj2_tumor)
+
+sigASVs_tumor_post1 <- tax_table(tumor_post1_DESeq) %>% as.data.frame() %>%
+  rownames_to_column(var="ASV") %>%
+  right_join(sigASVs_tumor_post1) %>%
   arrange(log2FoldChange) %>%
   mutate(Genus = make.unique(Genus)) %>%
   mutate(Genus = factor(Genus, levels=unique(Genus))) %>%
-  filter(!is.na(Genus) & Genus != "NA.1" & Genus != "NA.2")
+  filter(Genus != "NA")
 
-deseq_all_plot <- ggplot(sigASVs_all) +
-  geom_bar(aes(x=Genus, y=log2FoldChange), stat="identity")+
-  geom_errorbar(aes(x=Genus, ymin=log2FoldChange-lfcSE, ymax=log2FoldChange+lfcSE)) +
-  theme(axis.text.x = element_text(angle=90, hjust=1, vjust=0.5))
+deseq_tumor_post1_plot <- ggplot(sigASVs_tumor_post1) +
+  geom_bar(aes(x=Genus, y=log2FoldChange, fill = Phylum), stat="identity")+
+  # geom_errorbar(aes(x=Genus, ymin=log2FoldChange-lfcSE, ymax=log2FoldChange+lfcSE), size = 0.5, width = 0.5)  +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45, vjust = 1, hjust = 1, color = "black"), 
+        axis.text.y = element_text(color = "black"))
 
-ggsave("Deseq_all.png", deseq_all_plot, width = 6, height = 3.5)
+ggsave("Deseq_Tumor_prevspost1.png", deseq_tumor_post1_plot, width = 6, height = 3.5)
+
+
+
+
+
+#### TDLN post 1 ####
+pj2_TDLN <- pj2 %>%
+  subset_samples(location == "TDLN") %>%
+  subset_samples(group != "Day0") %>%
+  transform_sample_counts(function(x) x+1)
+
+pj2_deseq_TDLN <- phyloseq_to_deseq2(pj2_TDLN, ~`group`)
+DESEQ_pj2_TDLN <- DESeq(pj2_deseq_TDLN)
+res_TDLN_post1 <- results(DESEQ_pj2_TDLN, tidy=TRUE, 
+                            contrast = c("group", "Post-ICI1", "Pre-ICI"))
+
+# To get table of results
+sigASVs_TDLN_post1 <- res_TDLN_post1 %>% 
+  filter(padj<0.01 & abs(log2FoldChange)>2) %>%
+  dplyr::rename(ASV=row)
+
+# Get only asv names
+sigASVs_name_TDLN_post1 <- sigASVs_TDLN_post1 %>%
+  pull(ASV)
+
+# Prune phyloseq file
+TDLN_post1_DESeq <- prune_taxa(sigASVs_name_TDLN_post1, pj2_TDLN)
+
+sigASVs_TDLN_post1 <- tax_table(TDLN_post1_DESeq) %>% as.data.frame() %>%
+  rownames_to_column(var="ASV") %>%
+  right_join(sigASVs_TDLN_post1) %>%
+  arrange(log2FoldChange) %>%
+  mutate(Genus = make.unique(Genus)) %>%
+  mutate(Genus = factor(Genus, levels=unique(Genus))) %>%
+  filter(Genus != "NA")
+
+deseq_TDLN_post1_plot <- ggplot(sigASVs_TDLN_post1) +
+  geom_bar(aes(x=Genus, y=log2FoldChange, fill = Phylum), stat="identity")+
+  # geom_errorbar(aes(x=Genus, ymin=log2FoldChange-lfcSE, ymax=log2FoldChange+lfcSE), size = 0.5, width = 0.5)  +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45, vjust = 1, hjust = 1, color = "black"), 
+        axis.text.y = element_text(color = "black"))
+
+ggsave("Deseq_TDLN_prevspost1.png", deseq_TDLN_post1_plot, width = 6, height = 3.5)
+
+
+
+
+
+#### MLN ####
+pj2_MLN <- pj2 %>%
+  subset_samples(location == "MLN") %>%
+  subset_samples(group != "Day0") %>%
+  transform_sample_counts(function(x) x+1)
+
+pj2_deseq_MLN <- phyloseq_to_deseq2(pj2_MLN, ~`group`)
+DESEQ_pj2_MLN <- DESeq(pj2_deseq_MLN)
+res_MLN_post1 <- results(DESEQ_pj2_MLN, tidy=TRUE, 
+                          contrast = c("group", "Post-ICI1", "Pre-ICI"))
+
+# To get table of results
+sigASVs_MLN_post1 <- res_MLN_post1 %>% 
+  filter(padj<0.01 & abs(log2FoldChange)>2) %>%
+  dplyr::rename(ASV=row)
+
+# Get only asv names
+sigASVs_name_MLN_post1 <- sigASVs_MLN_post1 %>%
+  pull(ASV)
+
+# Prune phyloseq file
+MLN_post1_DESeq <- prune_taxa(sigASVs_name_MLN_post1, pj2_MLN)
+
+sigASVs_MLN_post1 <- tax_table(MLN_post1_DESeq) %>% as.data.frame() %>%
+  rownames_to_column(var="ASV") %>%
+  right_join(sigASVs_MLN_post1) %>%
+  arrange(log2FoldChange) %>%
+  mutate(Genus = make.unique(Genus)) %>%
+  mutate(Genus = factor(Genus, levels=unique(Genus))) %>%
+  filter(Genus != "NA")
+
+deseq_MLN_post1_plot <- ggplot(sigASVs_MLN_post1) +
+  geom_bar(aes(x=Genus, y=log2FoldChange, fill = Phylum), stat="identity")+
+  # geom_errorbar(aes(x=Genus, ymin=log2FoldChange-lfcSE, ymax=log2FoldChange+lfcSE), size = 0.5, width = 0.5)  +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle=45, vjust = 1, hjust = 1, color = "black"), 
+        axis.text.y = element_text(color = "black"))
+
+ggsave("Deseq_MLN_prevspost1.png", deseq_MLN_post1_plot, width = 6, height = 3.5)
+
 
 
 
@@ -105,4 +263,6 @@ head(upregulated_species, 10)
 ## Volcano plot: effect size VS significance
 ggplot(res) +
   geom_point(aes(x=log2FoldChange, y=-log10(padj)))
+
+
 
