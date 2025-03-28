@@ -10,7 +10,7 @@ See https://docs.google.com/document/d/1MUhiZ7W2_h0Ix_e1v_I4ckoV6U4LBi4b4HJwlLFK
 **Question:**
 
 Alpha
-  - * or actual p value
+  - "*" or actual p value
   - Need x-axis or not?
   - Need to talk about very pick shannon?
 
