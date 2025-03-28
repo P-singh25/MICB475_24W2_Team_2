@@ -51,7 +51,7 @@ sample_data(pj2_RA_grouped)$location <- factor(sample_data(pj2_RA_grouped)$locat
 
 # Step 8: Generate the Taxonomic Bar Plot
 taxa_bar_plot <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +  
-  theme_classic() +
+  theme_bw() +
   facet_wrap(.~location, scales = "free", nrow = 1) +  
   labs(
     # title = "Taxonomic Bar Plot (Relative Abundance)", 
@@ -66,21 +66,21 @@ taxa_bar_plot <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +
     legend.title = element_text(size = 14, hjust = 0.5),
     legend.text = element_text(size = 12), 
     axis.line = element_line(size = 0),
-    strip.background = element_rect(color = "white", fill = "white", size = 1), 
+    # strip.background = element_rect(color = "white", fill = "white", size = 1), 
     panel.border = element_rect(color = "black", fill = NA)
   ) +  
   scale_fill_manual(
     values = c(
-      "p__Bacteroidota" = "#1f78b4",
-      "p__Firmicutes" = "#33a02c",
-      "p__Proteobacteria" = "#e31a1c",
-      "p__Actinobacteriota" = "#ff7f00",
-      "p__Verrucomicrobiota" = "#6a3d9a",
-      "p__Fusobacteriota" = "#b2df8a",
-      "p__Deinococcota" = "#a6cee3",
-      "p__Euryarchaeota" = "#fb9a99",
-      "p__Planctomycetota" = "#b15928",
-      "p__Cyanobacteria" = "#fdbf6f",
+      "p__Bacteroidota" = "#1b7838",
+      "p__Firmicutes" = "#a6dca1",
+      "p__Proteobacteria" = "#fe9f9a",
+      "p__Actinobacteriota" = "#f3694e",
+      "p__Verrucomicrobiota" = "#dd65af",
+      "p__Fusobacteriota" = "#9281ff",
+      "p__Deinococcota" = "#0e9ee2",
+      "p__Euryarchaeota" = "#00d69f",
+      "p__Planctomycetota" = "#ffd165",
+      "p__Cyanobacteria" = "#1b9cd6",
       "Other" = "gray70"
     )
   ) +
