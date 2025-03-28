@@ -50,7 +50,12 @@ sample_data(pj2_RA_grouped)$group <- factor(
 sample_data(pj2_RA_grouped)$location <- factor(sample_data(pj2_RA_grouped)$location, levels = c("Spleen", "Tumor","TDLN", "MLN"))
 
 # Step 8: Generate the Taxonomic Bar Plot
-taxa_bar_plot <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +  
+df <- psmelt(pj2_RA_grouped)
+
+# Reorder Phylum levels
+df$Phylum <- factor(df$Phylum, levels = c(setdiff(unique(df$Phylum), "Other"), "Other"))
+
+taxa_bar_plot_1 <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +  
   theme_bw() +
   facet_wrap(.~location, scales = "free", nrow = 1) +  
   labs(
@@ -87,8 +92,7 @@ taxa_bar_plot <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +
   # scale_x_discrete(labels = c("Day 0", "Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3")) +  
   scale_y_continuous(labels = scales::percent_format())
 
-taxa_bar_plot
-ggsave("Taxa_plot_final.png")
+
 
 
 df <- psmelt(pj2_RA_grouped)
@@ -106,6 +110,12 @@ df <- psmelt(pj2_RA_grouped)
 
 # Reorder Phylum levels
 df$Phylum <- factor(df$Phylum, levels = c(setdiff(unique(df$Phylum), "Other"), "Other"))
+df$Phylum <- gsub("p__", "", df$Phylum)
+df$Phylum <- factor(df$Phylum, levels = c(
+   "Firmicutes", "Proteobacteria", "Bacteroidota", "Actinobacteriota",
+  "Verrucomicrobiota", "Fusobacteriota", "Deinococcota", "Euryarchaeota",
+  "Planctomycetota", "Cyanobacteria", "Other"
+))
 
 # Plot using the updated dataframe
 taxa_bar_plot <- ggplot(df, aes(x = group, y = Abundance, fill = Phylum)) +  
@@ -124,7 +134,26 @@ taxa_bar_plot <- ggplot(df, aes(x = group, y = Abundance, fill = Phylum)) +
     legend.title = element_text(size = 14, hjust = 0.5),
     legend.text = element_text(size = 12), 
     axis.line = element_line(size = 0),
-    strip.background = element_rect(color = "white", fill = "white", size = 1), 
+    #strip.background = element_rect(color = "white", fill = "white", size = 1), 
     panel.border = element_rect(color = "black", fill = NA)
-  ) +  
-  scale_y_continuous(labels = scales::percent_format())
+  ) + 
+  scale_fill_manual(
+    values = c(
+      "Bacteroidota" = "#ffd165",
+      "Firmicutes" = "#a6dca1",
+      "Proteobacteria" = "#fe9f9a",
+      "Actinobacteriota" = "#f3694e",
+      "Verrucomicrobiota" = "#dd65af",
+      "Fusobacteriota" = "#9281ff",
+      "Deinococcota" = "#0e9ee2",
+      "Euryarchaeota" = "#00d69f",
+      "Planctomycetota" = "#1b7838",
+      "Cyanobacteria" = "#1b9cd6",
+      "Other" = "gray70"
+    )
+  ) +
+  # scale_x_discrete(labels = c("Day 0", "Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3")) +  
+  scale_y_continuous(labels = scales::percent_format())  
+
+taxa_bar_plot
+ggsave("Taxa_plot_final.png")
