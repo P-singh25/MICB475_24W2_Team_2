@@ -69,6 +69,21 @@ taxa_bar_plot <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +
     strip.background = element_rect(color = "white", fill = "white", size = 1), 
     panel.border = element_rect(color = "black", fill = NA)
   ) +  
+  scale_fill_manual(
+    values = c(
+      "p__Bacteroidota" = "#1f78b4",
+      "p__Firmicutes" = "#33a02c",
+      "p__Proteobacteria" = "#e31a1c",
+      "p__Actinobacteriota" = "#ff7f00",
+      "p__Verrucomicrobiota" = "#6a3d9a",
+      "p__Fusobacteriota" = "#b2df8a",
+      "p__Deinococcota" = "#a6cee3",
+      "p__Euryarchaeota" = "#fb9a99",
+      "p__Planctomycetota" = "#b15928",
+      "p__Cyanobacteria" = "#fdbf6f",
+      "Other" = "gray70"
+    )
+  ) +
   # scale_x_discrete(labels = c("Day 0", "Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3")) +  
   scale_y_continuous(labels = scales::percent_format())
 
@@ -76,8 +91,8 @@ taxa_bar_plot
 ggsave("Taxa_plot_final.png")
 
 
-
-
+df <- psmelt(pj2_RA_grouped)
+unique(df$Phylum)
 
 
 

@@ -155,6 +155,9 @@ abundance_pca <- abundance_data_filtered %>% column_to_rownames("pathway")
 metadata_pca <- metadata_final
 colnames(metadata_pca)[colnames(metadata_pca) == "sample_id"] <- "sample_name"
 
+# Relevel group factor so "Pre-ICI" is the reference (for consistent color/shape ordering)
+metadata_pca$group <- factor(metadata_pca$group, levels = c("Pre-ICI", "Post-ICI3"))
+
 # Remove rows (pathways) with zero variance across all samples
 abundance_pca_clean <- abundance_pca[apply(abundance_pca, 1, function(x) var(x) != 0), ]
 
@@ -174,7 +177,9 @@ ggsave("../pathway_pca_plot.png", width = 8, height = 6, dpi = 300)
 # Lead the function in
 source("Picrust2/DESeq2_function.R")
 
-# Run the function on your own data
+# Relevel group factor so "Pre-ICI" is the reference (baseline) group
+metadata_final$group <- factor(metadata_final$group, levels = c("Pre-ICI", "Post-ICI3"))
+# Run the function on our data
 res =  DEseq2_function(abundance_data_filtered, metadata_final, "group")
 res$feature =rownames(res)
 res_desc = inner_join(res,metacyc_daa_annotated_results_df, by = "feature")
