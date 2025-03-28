@@ -155,5 +155,4 @@ taxa_bar_plot <- ggplot(df, aes(x = group, y = Abundance, fill = Phylum)) +
   # scale_x_discrete(labels = c("Day 0", "Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3")) +  
   scale_y_continuous(labels = scales::percent_format())  
 
-taxa_bar_plot
-ggsave("Taxa_plot_final.png")
+taxa_bar_plot <- ggsave("Taxa_Plot_Final.png")
