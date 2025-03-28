@@ -138,18 +138,28 @@ wunifrac_base <- plot_ordination(pj2, pcoa_wu, color = "location", shape="group"
 wunifrac_base
 
 
-# Bray curtis #
-zero_samples <- sample_sums(pj2) == 0
+
+
+
+
+####### Bray curtis #######
+### filter data ###
+pj2_filtered <- subset_samples(pj2, location != "Stool" & group != "Day 0")
+
+sample_data(pj2_filtered)$location <- factor(sample_data(pj2_filtered)$location, 
+                                             levels = c("Spleen", "Tumor", "TDLN", "MLN"))  
+
+zero_samples <- sample_sums(pj2_filtered) == 0
 sum(zero_samples)  # Count of empty samples
-sample_names(pj2)[zero_samples]  # List of empty samples
+sample_names(pj2_filtered)[zero_samples]  # List of empty samples
 
-pj2 <- prune_samples(sample_sums(pj2) > 0, pj2)
+pj2_filtered <- prune_samples(sample_sums(pj2_filtered) > 0, pj2_filtered)
 
-bc_dm <- distance(pj2, method="bray")  # Bray-Curtis distance
-pcoa_bray <- ordinate(pj2, method="PCoA", distance=bc_dm)
-plot_ordination(pj2, pcoa_bray, color = "location", shape="group")
+bc_dm <- distance(pj2_filtered, method="bray")  # Bray-Curtis distance
+pcoa_bray <- ordinate(pj2_filtered, method="PCoA", distance=bc_dm)
+plot_ordination(pj2_filtered, pcoa_bray, color = "location", shape="group")
 
-bcurtis_facet <- plot_ordination(pj2, pcoa_bray, color = "location", shape = "group") +
+bcurtis_facet <- plot_ordination(pj2_filtered, pcoa_bray, color = "location", shape = "group") +
   facet_wrap(~ group) +  # Creates separate plots for each group
   #stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
   labs(pch="Treatment group", col="Organ") +
@@ -158,12 +168,19 @@ bcurtis_facet <- plot_ordination(pj2, pcoa_bray, color = "location", shape = "gr
 
 bcurtis_facet
 
-bcurtis_base <- plot_ordination(pj2, pcoa_bray, color = "location", shape = "group") +
+bcurtis_base <- plot_ordination(pj2_filtered, pcoa_bray, color = "location", shape = "group") +
   #stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
   labs(pch="Treatment group", col="Organ") +
   theme_minimal()  # Optional: clean theme
 
 bcurtis_base
+
+
+
+
+
+
+
 
 #unweighted
 #### Load Data ####
