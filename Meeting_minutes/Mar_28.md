@@ -7,8 +7,9 @@ Mar 21st, 2025
 
 See https://docs.google.com/document/d/1MUhiZ7W2_h0Ix_e1v_I4ckoV6U4LBi4b4HJwlLFKZrc/edit?tab=t.0
 
-Question:
-- Alpha
+**Question:**
+
+Alpha
   - * or actual p value
   - Need x-axis or not?
   - Need to talk about very pick shannon?
@@ -21,3 +22,7 @@ PICURST
   - sample 1: Pre-ICI
   - sample 2: Post-ICI3
   - so is Pre-ICI control or Post-ICI3
+
+Overall:
+  - should we just focus on spleen for all tests?
+  - indictor species: can we just put the table in the paper?
