@@ -23,6 +23,7 @@ PICURST
   - sample 2: Post-ICI3
   - so is Pre-ICI control or Post-ICI3
   - bigger eclipse = more diverse metabolic pathway??
+  - How to interpret the heat map?
 
 Overall:
   - should we just focus on spleen for all tests?
