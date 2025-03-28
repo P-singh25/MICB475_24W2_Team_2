@@ -22,7 +22,9 @@ PICURST
   - sample 1: Pre-ICI
   - sample 2: Post-ICI3
   - so is Pre-ICI control or Post-ICI3
+  - bigger eclipse = more diverse metabolic pathway??
 
 Overall:
   - should we just focus on spleen for all tests?
   - indictor species: can we just put the table in the paper?
+  - base on abundance ok?
