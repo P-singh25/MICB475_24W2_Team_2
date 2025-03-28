@@ -53,7 +53,8 @@ colnames(metadata)[colnames(metadata) == "sample-id"] <- "sample_id"
 
 # Filter the metadata for only 'Pre-ICI' and 'Post-ICI3' groups
 filtered_metadata <- metadata %>%
-  filter(group %in% c("Pre-ICI", "Post-ICI3"))
+  filter(group %in% c("Pre-ICI", "Post-ICI3")) %>%
+  filter(location == "Spleen")
 
 # Save the filtered metadata to as a new file
 write_delim(filtered_metadata, "PiCRUST2/filtered_metadata_for_picrust.tsv", delim = "\t")
@@ -107,12 +108,14 @@ abundance_desc = abundance_desc[,-c(85:ncol(abundance_desc))]
 
 
 
-
 #### Heatmap ####
 
+# Get just the sample columns + 'feature'
+sample_cols <- c("feature", metadata_final$sample_id)
+abundance_desc_filtered <- abundance_desc[, colnames(abundance_desc) %in% sample_cols]
 
 # Generate a heatmap and save it
-pathway_heatmap(abundance = abundance_desc %>% column_to_rownames("feature"), metadata = metadata_final, group = "group")
+pathway_heatmap(abundance = abundance_desc_filtered %>% column_to_rownames("feature"), metadata = metadata_final, group = "group")
 
 ggsave("../pathway_heatmap.png", 
        plot = last_plot() + 
@@ -120,8 +123,8 @@ ggsave("../pathway_heatmap.png",
        width = 12, height = 10, dpi = 300)
 
 # Reduce Number of Pathways, keep only significant
-top_pathways = abundance_desc %>%
-  slice_max(order_by = rowSums(abs(.[,-1])), n = 30) # Select top 30
+top_pathways = abundance_desc_filtered %>%
+  slice_max(order_by = rowSums(abs(.[,-1])), n = 20) # Select top 20
 
 # Re-run pathway_heatmap() with filtered data and save it 
 heatmap_plot <- pathway_heatmap(abundance = top_pathways %>% column_to_rownames("feature"), 
@@ -134,7 +137,7 @@ heatmap_red_only <- heatmap_plot +
     high = "red"
   )
 
-ggsave("../pathway_heatmap_30.png", 
+ggsave("../pathway_heatmap_20.png", 
        plot = last_plot() + 
          theme(axis.text.y = element_text(size = 9, hjust = 1)),  
        width = 12, height = 10, dpi = 300)
@@ -151,6 +154,9 @@ abundance_pca <- abundance_data_filtered %>% column_to_rownames("pathway")
 # Create a new data frame of metadata where the column name 'sample_id' is changed to 'sample_name' 
 metadata_pca <- metadata_final
 colnames(metadata_pca)[colnames(metadata_pca) == "sample_id"] <- "sample_name"
+
+# Relevel group factor so "Pre-ICI" is the reference (for consistent color/shape ordering)
+metadata_pca$group <- factor(metadata_pca$group, levels = c("Pre-ICI", "Post-ICI3"))
 
 # Remove rows (pathways) with zero variance across all samples
 abundance_pca_clean <- abundance_pca[apply(abundance_pca, 1, function(x) var(x) != 0), ]
@@ -171,7 +177,9 @@ ggsave("../pathway_pca_plot.png", width = 8, height = 6, dpi = 300)
 # Lead the function in
 source("Picrust2/DESeq2_function.R")
 
-# Run the function on your own data
+# Relevel group factor so "Pre-ICI" is the reference (baseline) group
+metadata_final$group <- factor(metadata_final$group, levels = c("Pre-ICI", "Post-ICI3"))
+# Run the function on our data
 res =  DEseq2_function(abundance_data_filtered, metadata_final, "group")
 res$feature =rownames(res)
 res_desc = inner_join(res,metacyc_daa_annotated_results_df, by = "feature")
@@ -181,7 +189,13 @@ View(res_desc)
 # Filter to only include significant pathways
 sig_res = res_desc %>%
   filter(pvalue < 0.05)
+  
 # You can also filter by Log2fold change
+# keep only greater than 2 fold change or less than -2
+res_desc$pvalue <- as.numeric(res_desc$pvalue)
+res_desc$log2FoldChange <- as.numeric(res_desc$log2FoldChange)
+sig_res = res_desc %>%
+  filter(pvalue < 0.05 & (log2FoldChange > 2 | log2FoldChange < -2 ))
 
 # Generate the bar plot for our data and save it 
 sig_res <- sig_res[order(sig_res$log2FoldChange),]

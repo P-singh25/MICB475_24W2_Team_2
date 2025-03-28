@@ -51,7 +51,7 @@ sample_data(pj2_RA_grouped)$location <- factor(sample_data(pj2_RA_grouped)$locat
 
 # Step 8: Generate the Taxonomic Bar Plot
 taxa_bar_plot <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +  
-  theme_classic() +
+  theme_bw() +
   facet_wrap(.~location, scales = "free", nrow = 1) +  
   labs(
     # title = "Taxonomic Bar Plot (Relative Abundance)", 
@@ -66,9 +66,24 @@ taxa_bar_plot <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +
     legend.title = element_text(size = 14, hjust = 0.5),
     legend.text = element_text(size = 12), 
     axis.line = element_line(size = 0),
-    strip.background = element_rect(color = "white", fill = "white", size = 1), 
+    # strip.background = element_rect(color = "white", fill = "white", size = 1), 
     panel.border = element_rect(color = "black", fill = NA)
   ) +  
+  scale_fill_manual(
+    values = c(
+      "p__Bacteroidota" = "#1b7838",
+      "p__Firmicutes" = "#a6dca1",
+      "p__Proteobacteria" = "#fe9f9a",
+      "p__Actinobacteriota" = "#f3694e",
+      "p__Verrucomicrobiota" = "#dd65af",
+      "p__Fusobacteriota" = "#9281ff",
+      "p__Deinococcota" = "#0e9ee2",
+      "p__Euryarchaeota" = "#00d69f",
+      "p__Planctomycetota" = "#ffd165",
+      "p__Cyanobacteria" = "#1b9cd6",
+      "Other" = "gray70"
+    )
+  ) +
   # scale_x_discrete(labels = c("Day 0", "Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3")) +  
   scale_y_continuous(labels = scales::percent_format())
 
@@ -76,8 +91,8 @@ taxa_bar_plot
 ggsave("Taxa_plot_final.png")
 
 
-
-
+df <- psmelt(pj2_RA_grouped)
+unique(df$Phylum)
 
 
 
