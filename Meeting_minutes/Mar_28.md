@@ -28,3 +28,7 @@ Overall:
   - should we just focus on spleen for all tests?
   - indictor species: can we just put the table in the paper?
   - base on abundance ok?
+
+Limitation:
+- cross contamination
+- don't know which mice PD-1 worked
