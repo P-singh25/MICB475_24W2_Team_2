@@ -53,7 +53,8 @@ colnames(metadata)[colnames(metadata) == "sample-id"] <- "sample_id"
 
 # Filter the metadata for only 'Pre-ICI' and 'Post-ICI3' groups
 filtered_metadata <- metadata %>%
-  filter(group %in% c("Pre-ICI", "Post-ICI3"))
+  filter(group %in% c("Pre-ICI", "Post-ICI3")) %>%
+  filter(location == "Spleen")
 
 # Save the filtered metadata to as a new file
 write_delim(filtered_metadata, "PiCRUST2/filtered_metadata_for_picrust.tsv", delim = "\t")
@@ -107,12 +108,14 @@ abundance_desc = abundance_desc[,-c(85:ncol(abundance_desc))]
 
 
 
-
 #### Heatmap ####
 
+# Get just the sample columns + 'feature'
+sample_cols <- c("feature", metadata_final$sample_id)
+abundance_desc_filtered <- abundance_desc_[, colnames(abundance_desc) %in% sample_cols]
 
 # Generate a heatmap and save it
-pathway_heatmap(abundance = abundance_desc %>% column_to_rownames("feature"), metadata = metadata_final, group = "group")
+pathway_heatmap(abundance = abundance_desc_filtered %>% column_to_rownames("feature"), metadata = metadata_final, group = "group")
 
 ggsave("../pathway_heatmap.png", 
        plot = last_plot() + 
@@ -120,8 +123,8 @@ ggsave("../pathway_heatmap.png",
        width = 12, height = 10, dpi = 300)
 
 # Reduce Number of Pathways, keep only significant
-top_pathways = abundance_desc %>%
-  slice_max(order_by = rowSums(abs(.[,-1])), n = 30) # Select top 30
+top_pathways = abundance_desc_filtered %>%
+  slice_max(order_by = rowSums(abs(.[,-1])), n = 20) # Select top 20
 
 # Re-run pathway_heatmap() with filtered data and save it 
 heatmap_plot <- pathway_heatmap(abundance = top_pathways %>% column_to_rownames("feature"), 
@@ -181,7 +184,13 @@ View(res_desc)
 # Filter to only include significant pathways
 sig_res = res_desc %>%
   filter(pvalue < 0.05)
+  
 # You can also filter by Log2fold change
+# keep only greater than 2 fold change or less than -2
+res_desc$pvalue <- as.numeric(res_desc$pvalue)
+res_desc$log2FoldChange <- as.numeric(res_desc$log2FoldChange)
+sig_res = res_desc %>%
+  filter(pvalue < 0.05 & (log2FoldChange > 2 | log2FoldChange < -2 ))
 
 # Generate the bar plot for our data and save it 
 sig_res <- sig_res[order(sig_res$log2FoldChange),]
