@@ -34,5 +34,28 @@ isa_results_spleen <- pj2_is$sign %>%
 
 write.csv(isa_results_spleen, "indicator_species_spleen.csv", row.names = FALSE)
 
+isa_results_spleen_stri <- isa_results_spleen %>%
+  filter(stat > 0.7)
+
+df_melt <- psmelt(pj2_glom_RA )
+
+summary_by_otu_mean <- df_melt %>%
+  group_by(OTU, Genus,Family,Order,Class,Phylum, group) %>%
+  summarize(
+    mean_abundance = mean(Abundance, na.rm = TRUE)
+  )
+
+summary_by_otu_mean <- summary_by_otu_mean %>%
+  rename(ASV = OTU)
+
+filtered_unique_asv <- summary_by_otu_mean %>%
+  filter(ASV %in% unique(isa_results_spleen_stri$ASV))
+
+
+bubble <- ggplot(filtered_unique_asv, aes(x = group, y = Genus)) + 
+  geom_point(aes(size = mean_abundance, fill = Genus), alpha = 0.75, shape = 21) + 
+  labs( x= "", y = "", size = "Relative Abundance (%)", fill = "Genus")
+
+
 
 write.csv(isa_results, "indicator_species.csv", row.names = FALSE)
