@@ -159,21 +159,40 @@ bc_dm <- distance(pj2_filtered, method="bray")  # Bray-Curtis distance
 pcoa_bray <- ordinate(pj2_filtered, method="PCoA", distance=bc_dm)
 plot_ordination(pj2_filtered, pcoa_bray, color = "location", shape="group")
 
-bcurtis_facet <- plot_ordination(pj2_filtered, pcoa_bray, color = "location", shape = "group") +
-  facet_wrap(~ group) +  # Creates separate plots for each group
-  #stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
-  labs(pch="Treatment group", col="Organ") +
-  theme_minimal() +
-  stat_ellipse(aes(group = location), level = 0.95, linetype = "solid")  # Optional: clean theme
+sample_data(pj2_filtered)$group <- factor(sample_data(pj2_filtered)$group, 
+                                          levels = c("Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3"))
 
+bcurtis_facet <- plot_ordination(pj2_filtered, pcoa_bray, color = "location") +
+  facet_wrap(~ group) +  # Single row layout
+  labs(pch = "Treatment group", col = "Location") +
+  theme_classic() +
+  stat_ellipse(aes(group = location), level = 0.8, linetype = "solid") +
+ # coord_fixed(ratio = 1.2) +
+  scale_color_npg() +
+  theme(legend.title = element_text(size = 14, hjust = 0.5), 
+        panel.border = element_rect(color = "black", fill = NA),
+        axis.text.y = element_text(size = 12, angle = 0, color = "black"),
+        axis.text.x = element_text(size = 12, angle = 0, color = "black"),
+        axis.line = element_line(size = 0),
+        strip.background = element_rect(color = "white", fill = "white", size = 1),
+        strip.text = element_text(size = 14),
+        legend.text = element_text(size = 12))
 bcurtis_facet
+ggsave("bray_curtis.png")
 
-bcurtis_base <- plot_ordination(pj2_filtered, pcoa_bray, color = "location", shape = "group") +
-  #stat_ellipse(aes(group = location), level = 0.95, linetype = "solid") +
-  labs(pch="Treatment group", col="Organ") +
-  theme_minimal()  # Optional: clean theme
+# Significance for pre-ici
+pj2_group_1 <- subset_samples(pj2_filtered, group == "Pre-ICI")
+meta_data_group <- as(sample_data(pj2_group_1),"data.frame")
+uu_dm_group <- distance(pj2_group_1, method = "bray")
+perm_results_pre <- adonis2(uu_dm_group ~ location, data = meta_data_group, permutations = 999)
+print(perm_results_pre)
 
-bcurtis_base
+# Significance for post-ici3
+pj2_group <- subset_samples(pj2_filtered, group == "Post-ICI3")
+meta_data_group <- as(sample_data(pj2_group),"data.frame")
+uu_dm_group <- distance(pj2_group, method = "bray")
+perm_results_post3 <- adonis2(uu_dm_group ~ location, data = meta_data_group, permutations = 999)
+print(perm_results_post3)
 
 
 
