@@ -112,7 +112,7 @@ abundance_desc = abundance_desc[,-c(85:ncol(abundance_desc))]
 
 # Get just the sample columns + 'feature'
 sample_cols <- c("feature", metadata_final$sample_id)
-abundance_desc_filtered <- abundance_desc_[, colnames(abundance_desc) %in% sample_cols]
+abundance_desc_filtered <- abundance_desc[, colnames(abundance_desc) %in% sample_cols]
 
 # Generate a heatmap and save it
 pathway_heatmap(abundance = abundance_desc_filtered %>% column_to_rownames("feature"), metadata = metadata_final, group = "group")
@@ -137,7 +137,7 @@ heatmap_red_only <- heatmap_plot +
     high = "red"
   )
 
-ggsave("../pathway_heatmap_30.png", 
+ggsave("../pathway_heatmap_20.png", 
        plot = last_plot() + 
          theme(axis.text.y = element_text(size = 9, hjust = 1)),  
        width = 12, height = 10, dpi = 300)
