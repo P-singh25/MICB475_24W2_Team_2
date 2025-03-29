@@ -3,6 +3,9 @@ library(tidyverse)
 library(phyloseq)
 library(indicspecies)
 
+install.packages("gtsummary")
+library(gtsummary)
+
 #### Load data ####
 load("pj2.RData")
 
@@ -35,8 +38,17 @@ isa_results_spleen <- pj2_is$sign %>%
 write.csv(isa_results_spleen, "indicator_species_spleen.csv", row.names = FALSE)
 
 isa_results_spleen_stri <- isa_results_spleen %>%
-  filter(stat > 0.7)
+  filter(stat > 0.7) %>%
+  as.data.frame()
 
+write.csv(isa_results_spleen_stri, "indicator_species_spleen_stringent.csv", row.names = FALSE)
+
+df_filtered <- isa_results_spleen_stri[, !names(isa_results_spleen_stri) %in% c("ASV", "index", "Species")]
+write.csv(df_filtered, "indicator_species_spleen_filter.csv", row.names = FALSE)
+
+
+
+#### 
 df_melt <- psmelt(pj2_glom_RA )
 
 summary_by_otu_mean <- df_melt %>%

@@ -1,0 +1,6 @@
+"s.Post-ICI1","s.Post-ICI2","s.Post-ICI3","s.Pre-ICI","stat","p.value","Domain","Phylum","Class","Order","Family","Genus"
+1,1,1,0,0.727678471394843,0.005,"d__Bacteria","p__Actinobacteriota","c__Actinobacteria","o__Bifidobacteriales","f__Bifidobacteriaceae","g__Bifidobacterium"
+1,1,1,0,0.786203377554641,0.01,"d__Bacteria","p__Firmicutes","c__Bacilli","o__Staphylococcales","f__Staphylococcaceae","g__Staphylococcus"
+1,1,1,0,0.781241147313749,0.02,"d__Bacteria","p__Firmicutes","c__Bacilli","o__Erysipelotrichales","f__Erysipelotrichaceae","g__Turicibacter"
+0,0,1,0,0.762299401987784,0.01,"d__Bacteria","p__Firmicutes","c__Clostridia","o__Lachnospirales","f__Lachnospiraceae","g__Lachnospiraceae_NK4A136_group"
+1,1,1,0,0.830030662065651,0.005,"d__Bacteria","p__Firmicutes","c__Clostridia","o__Lachnospirales","f__Lachnospiraceae","g__Blautia"
