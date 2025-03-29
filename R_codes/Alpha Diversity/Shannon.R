@@ -100,7 +100,7 @@ plot.pd_spleen_Shannon <- ggplot(sample_data(shannon_df_0_spleen), aes(x = group
   theme_classic()+
   geom_signif(comparisons = list(c("Pre-ICI","Post-ICI1"), c("Pre-ICI","Post-ICI2"), c("Pre-ICI", "Post-ICI3")),
               y_position = c(4.5, 4.1, 3.7),
-              annotations = c("ns","p<0.007","p<0.008")) +
+              annotations = c("ns","**","**")) +
   scale_fill_npg(name = "group") +
   theme(legend.position = "none") +
   expand_limits(y = 4.5) +
@@ -111,7 +111,7 @@ plot.pd_spleen_Shannon <- ggplot(sample_data(shannon_df_0_spleen), aes(x = group
         axis.text.x = element_text(size = 10, angle = 0, color = "black")) 
 plot.pd_spleen_Shannon
 
-ggsave(("Alpha_Diversity_Shannon_Spleen.png"), plot.pd_spleen_Shannon, width = 6, height = 3.5)
+ggsave(("Alpha_Diversity_Shannon_Spleen_*.png"), plot.pd_spleen_Shannon, width = 6, height = 3.5)
 
 ####Tumor
 shannon_df_0_tumor <- subset(shannon_df_0, location == "Tumor")
@@ -124,7 +124,7 @@ plot.pd_tumor_Shannon <- ggplot(sample_data(shannon_df_0_tumor), aes(x = group, 
   ylab("Shannon Index") +
   theme_classic()+
   geom_signif(comparisons = list(c("Pre-ICI","Post-ICI1"), c("Pre-ICI","Post-ICI2"), c("Pre-ICI", "Post-ICI3")),
-              y_position = c(4.3, 4.1, 3.9),
+              y_position = c(4.4, 4.1, 3.9),
               annotations = c("ns","ns","ns")) +
   scale_fill_npg(name = "group") +
   theme(legend.position = "none") +
@@ -233,8 +233,8 @@ plot.pd_pre_Shannon <- ggplot(sample_data(shannon_df_0_pre), aes(x = location, y
   ylab("Shannon Index") +
   theme_classic()+
   geom_signif(comparisons = list(c("Tumor","Spleen"), c("TDLN", "Spleen"), c("Spleen","MLN")),
-              y_position = c(4.7, 4.3, 3.9),
-              annotations = c("p<0.0003","p<0.0002","p<0.00006")) +
+              y_position = c(4.8, 4.35, 3.9),
+              annotations = c("***","***","****")) +
   scale_fill_npg(name = "Location") +
   expand_limits(y = 5) +
   theme(legend.position = "none") +
@@ -244,7 +244,7 @@ plot.pd_pre_Shannon <- ggplot(sample_data(shannon_df_0_pre), aes(x = location, y
         axis.text.x = element_text(size = 10, angle = 0, color = "black")) 
 plot.pd_pre_Shannon
 
-ggsave(("Alpha_Diversity_Shannon_Pre-ICI.png"), plot.pd_pre_Shannon, width = 6, height = 3.5)
+ggsave(("Alpha_Diversity_Shannon_Pre-ICI_*.png"), plot.pd_pre_Shannon, width = 6, height = 3.5)
 
 ############
 ##Shannon: Post-ICI1 ##
@@ -284,7 +284,7 @@ plot.pd_post1_Shannon <- ggplot(sample_data(shannon_df_0_post1), aes(x = locatio
   ylab("Shannon Index") +
   theme_classic()+
   geom_signif(comparisons = list(c("Tumor","Spleen"), c("TDLN", "Spleen"), c("Spleen","MLN")),
-              y_position = c(4.7, 4.3, 3.9),
+              y_position = c(4.8, 4.35, 3.9),
               annotations = c("ns","ns","ns")) +
   scale_fill_npg(name = "Location") +
   expand_limits(y = 5.3) +
@@ -335,7 +335,7 @@ plot.pd_post2_Shannon <- ggplot(sample_data(shannon_df_0_post2), aes(x = locatio
   ylab("Shannon Index") +
   theme_classic()+
   geom_signif(comparisons = list(c("Tumor","Spleen"), c("TDLN", "Spleen"), c("Spleen","MLN")),
-              y_position = c(4.7, 4.3, 3.9),
+              y_position = c(4.8, 4.35, 3.9),
               annotations = c("ns","ns","ns")) +
   scale_fill_npg(name = "Location") +
   theme(legend.position = "none") +
@@ -388,7 +388,7 @@ plot.pd_post_Shannon <- ggplot(sample_data(shannon_df_0_post), aes(x = location,
   ylab("Shannon Index") +
   theme_classic()+
   geom_signif(comparisons = list(c("Tumor","Spleen"), c("TDLN", "Spleen"), c("Spleen","MLN")),
-              y_position = c(4.7, 4.3, 3.9),
+              y_position = c(4.8, 4.35, 3.9),
               annotations = c("ns","ns","ns")) +
   scale_fill_npg(name = "Location") +
   theme(legend.position = "none") +
@@ -400,3 +400,4 @@ plot.pd_post_Shannon <- ggplot(sample_data(shannon_df_0_post), aes(x = location,
 plot.pd_post_Shannon
 
 ggsave(("Alpha_Diversity_Shannon_Post-ICI3.png"), plot.pd_post_Shannon, width = 6, height = 3.5)
+
