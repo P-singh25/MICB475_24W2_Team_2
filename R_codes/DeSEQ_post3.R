@@ -114,7 +114,7 @@ sigASVs_spleen_post3 <- tax_table(spleen_post3_DESeq) %>% as.data.frame() %>%
   mutate(Genus = factor(Genus, levels=unique(Genus)))
 
 deseq_spleen_post3_plot <- ggplot(sigASVs_spleen_post3) +
-  geom_bar(aes(x=Genus, y=log2FoldChange, fill = Phylum), stat="identity")+
+  geom_bar(aes(x=Genus, y=log2FoldChange, fill = Phylum), stat="identity", width = 0.7)+
   # geom_errorbar(aes(x=Genus, ymin=log2FoldChange-lfcSE, ymax=log2FoldChange+lfcSE), size = 0.5, width = 0.5)  +
   theme_bw() +
   scale_x_discrete(labels = c("g__Staphylococcus" = "Staphylococcus", 
@@ -122,12 +122,14 @@ deseq_spleen_post3_plot <- ggplot(sigASVs_spleen_post3) +
                               "g__Enterococcus" = "Enterococcus", 
                               "g__Akkermansia" = "Akkermansia", 
                               "g__Dubosiella" = "Dubosiella", 
-                              "g__Clostridioides" = "Clostridioides")) +
-  scale_fill_manual(values = c("p__Firmicutes" = "red", "p__Verrucomicrobiota" = "blue"),  # Set colors
+                              "g__Clostridioides" = "Clostridioides"), 
+                   expand = c(0.1, 0)) +
+  scale_fill_manual(values = c("p__Firmicutes" = "#7fc680", "p__Verrucomicrobiota" = "#0e9ee0"),  # Set colors
                     labels = c("p__Firmicutes" = "Firmicutes", "p__Verrucomicrobiota" = "Verrucomicrobiota"))+
   geom_hline(yintercept = 0, linetype = "solid", color = "black", size = 0.2) +
   theme(axis.text.x = element_text(angle=45, vjust = 1, hjust = 1, color = "black"), 
-        axis.text.y = element_text(color = "black"))
+        axis.text.y = element_text(color = "black"), 
+        legend.title = element_text(size = 12, hjust = 0.5))
 
 ggsave("Deseq_Spleen_prevspost3.png", deseq_spleen_post3_plot, width = 6, height = 3.5)
 

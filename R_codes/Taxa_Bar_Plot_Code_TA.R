@@ -142,7 +142,7 @@ taxa_bar_plot <- ggplot(df, aes(x = group, y = Abundance, fill = Phylum)) +
   scale_fill_manual(
     values = c(
      "Bacteroidota" = "#ffd165",
-    "Firmicutes" = "#a6dca1",
+    "Firmicutes" = "#7ec67f",
    "Proteobacteria" = "#fe9f9a",
   "Actinobacteriota" = "#f3694e",
   "Verrucomicrobiota" = "#0e9ee0",
