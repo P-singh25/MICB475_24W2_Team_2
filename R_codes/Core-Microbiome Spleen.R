@@ -1,6 +1,7 @@
 library(phyloseq)
 library(microbiome)
 library(ggVennDiagram)
+library(ggplot2)
 
 sample_data(pj2)
 
@@ -42,8 +43,14 @@ core_all_post_ICI3 <- ggVennDiagram(
     "Post-ICI1" = core_Spleen_Post1,
     "Post-ICI2" = core_Spleen_Post2,
     "Post-ICI3" = core_Spleen_Post3
-  )
-)
+  ), label_alpha = 0, set_size = 6, label_size = 6
+  #, label = "count"
+)+
+  scale_fill_gradient(low = "white", high = "orange") +  # Fill colors from white to orange
+  scale_color_manual(values = c("black", "black", "black", "black")) +
+  theme(text = element_text(size = 13))
+ # theme(legend.position = "none")
+
 core_all_post_ICI3
 
 # Save the venn diagram
