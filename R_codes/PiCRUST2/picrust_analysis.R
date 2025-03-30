@@ -202,6 +202,11 @@ sig_res <- sig_res[order(sig_res$log2FoldChange),]
 bar <- ggplot(data = sig_res, aes(y = reorder(description, sort(as.numeric(log2FoldChange))), x= log2FoldChange, fill = pvalue))+
   geom_bar(stat = "identity")+ 
   theme_bw()+
-  labs(x = "Log2FoldChange", y="Pathways")
+  labs(x = "Log2FoldChange", y="Pathways") +
+  theme(
+    axis.text.y = element_text(size = 12, color = "black", face = "bold"),  # Make pathway names bigger and black
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text.x = element_text(size = 10)
+  )
 
 ggsave("../pathway_barplot.png", plot = bar, width = 8, height = 6, dpi = 300)
