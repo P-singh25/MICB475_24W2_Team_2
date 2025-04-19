@@ -1,11 +1,18 @@
-Method:
-Import libraries: tidyverse, phyloseq, vegan, and ggplot2
-Filter phyloseq object to keep treatment type == Separate and experiment group == general and cohouse
-Load phyloseq object after filtering and rarification
-Convert ASV matrix from phyloseq object into a dataframe
-Convert metadata from phyloseq object into a dataframe
-Filter the metadata to only keep variables that are related to gut microbiome dysbiosis(Sample.Name, Age.New.Bin, Cage.ID, Experiment.Group, Genotype, Mouse.ID, Phenotype.score, FD.severity, Sex, Weight.grams)
-Create For Loops to iterate over each variable in the metadata, remove missing data, filter out NA values, calculate a dissimilarity matrix based on Bray-Curtis distance, and perform the PERMANOVA statistical analysis test, controlling for cage ID, to generate R-squared statistic and p-value in a results table.
-Adjust p-values
-Filter the result table to include only significant variables with Padjust < 0.05
-Generate a bar plot using ggplot2 to visualize the R-squared values for each significant variable
+# P06- To determine changes in microbial composition over ICI treatment course in spleen, MLN, TDLN and tumor
+
+March 8st, 2025
+
+## Purpose:
+To perform beta diversity (Bray Curtis) analysis to plot the abundance of each sample to determine changes in microbial composition across location and over time.
+
+## Material: 
+1. R & Rstudio
+2. pj2.RData (phyoseq object)
+
+## Method:
+1. Import libraries: tidyverse, phyloseq, vegan, and ggplot2
+2. Filter phyloseq object to keep group: Pre-ICI, Post-ICI1, Post-ICI2, Post-ICI3, and location: spleen, MLN, TDLN, tumor.
+3. Load phyloseq object after filtering and rarification
+4. Convert ASV matrix from phyloseq object into a dataframe
+5. Convert metadata from phyloseq object into a dataframe
+6. Perform Bray Curtis Principal Coordinate Analysis and plot using ggplot2. Draw eclipses to represent 95% confidence interval of the each condition. PERMANOVA statistical analysis test to generate R-squared statistic and p-value in a results table.
