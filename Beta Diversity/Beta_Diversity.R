@@ -1,3 +1,4 @@
+# load library
 library(phyloseq)
 library(picante)
 library(tidyverse)
@@ -5,15 +6,17 @@ library(ape)
 library(ggsci)
 library(scales)
 
-
+# load the pj2 R data 
 load("pj2.RData")
 sample_data(pj2)
 
 #### Beta diversity #####
 
 ### filter data ###
+# remove the stool and D0 sample 
 pj2_filtered <- subset_samples(pj2, location != "Stool" & group != "Day 0")
 
+# Reorganize the order of the location 
 sample_data(pj2_filtered)$location <- factor(sample_data(pj2_filtered)$location, 
                                           levels = c("Spleen", "Tumor", "TDLN", "MLN"))  
   
@@ -45,13 +48,6 @@ plot_ordination(pj2_filtered, pcoa_uu, color = "location", shape="group")
 sample_data(pj2_filtered)$group <- factor(sample_data(pj2_filtered)$group, 
                                           levels = c("Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3"))
 
-# Faceted plot
-# unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
-#   facet_wrap(~ group) +
-#   labs(pch="Treatment group", col="Organ") +
-#   theme_bw() +
-#   stat_ellipse(aes(group = location), level = 0.95, linetype = "solid")
-
 unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
   facet_wrap(~ group, nrow = 2, scales = "fixed") +  # Single row layout
   labs(pch = "Treatment group", col = "Location") +
@@ -67,9 +63,6 @@ unifrac_facet <- plot_ordination(pj2_filtered, pcoa_uu, color = "location") +
         strip.background = element_rect(color = "white", fill = "white", size = 1),
         strip.text = element_text(size = 14),
         legend.text = element_text(size = 12))
-
-
-  
 
 unifrac_facet
 ggsave("Beta_Diversity_unweighted_unifrac.png")  # Adjust size if needed
