@@ -4,7 +4,8 @@ library(microbiome)
 library(ggVennDiagram)
 library(ggplot2)
 
-#
+#load phyloseq object ####
+load("pj2.RData")
 sample_data(pj2)
 
 # Subset the phyloseq object for MLN Pre-ICI and MLN Post-ICI3
@@ -15,7 +16,6 @@ Spleen_Post3 <- subset_samples(pj2, location == "Spleen" & group == "Post-ICI3")
 
 
 # Transform sample counts to relative abundance (optional but recommended for core analysis)
-
 Spleen_Pre_relabund <- transform_sample_counts(Spleen_Pre, fun = function(x) x / sum(x))
 Spleen_Post1_relabund <- transform_sample_counts(Spleen_Post1, fun = function(x) x / sum(x))
 Spleen_Post2_relabund <- transform_sample_counts(Spleen_Post2, fun = function(x) x / sum(x))
@@ -23,12 +23,12 @@ Spleen_Post3_relabund <- transform_sample_counts(Spleen_Post3, fun = function(x)
 
 # Identify core microbiome for each group
 # Core microbiome is defined as taxa present in at least 80% of samples (prevalence = 0.3) with any non-zero abundance (detection = 0)
-
-
 core_Spleen_Pre <- core_members(Spleen_Pre_relabund, detection = 0, prevalence = 0.3)
 core_Spleen_Post1 <- core_members(Spleen_Post1_relabund, detection = 0, prevalence = 0.3)
 core_Spleen_Post2 <- core_members(Spleen_Post2_relabund, detection = 0, prevalence = 0.3)
 core_Spleen_Post3 <- core_members(Spleen_Post3_relabund, detection = 0, prevalence = 0.3)
+
+                                                 
 ########## Post ICI-3 ############
 
 # Find shared taxa 
