@@ -2,6 +2,8 @@ library(phyloseq)
 library(microbiome)
 library(ggVennDiagram)
 
+# load phyloseq object
+load("pj2.RData")
 sample_data(pj2)
 
 # Subset the phyloseq object for MLN Pre-ICI and MLN Post-ICI3
