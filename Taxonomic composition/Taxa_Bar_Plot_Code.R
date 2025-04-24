@@ -92,16 +92,8 @@ taxa_bar_plot_1 <- plot_bar(pj2_RA_grouped, fill = "Phylum", x = "group") +
   # scale_x_discrete(labels = c("Day 0", "Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3")) +
   scale_y_continuous(labels = scales::percent_format())
 
-
-
-
 df <- psmelt(pj2_RA_grouped)
 unique(df$Phylum)
-
-
-
-
-
 
 ### reorder the phylum
 
@@ -157,5 +149,5 @@ taxa_bar_plot <- ggplot(df, aes(x = group, y = Abundance, fill = Phylum)) +
   # scale_x_discrete(labels = c("Day 0", "Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3")) +  
   scale_y_continuous(labels = scales::percent_format())  
 
-taxa_bar_plot
+#Save the generated taxa bar plot
 ggsave("Taxa_Plot_Final.png")
