@@ -48,47 +48,8 @@ for (loc in shannon_phylo_location) {
   print(tukey)
 }
 
-######Heatmap attempt ######
-tukey_df <- as.data.frame(tukey$group)
-tukey_df
-tukey_df$Comparison <- rownames(tukey_df)  # Add group comparisons
-colnames(tukey_df) <- c("diff", "lwr", "upr", "p_adj", "Comparison")
-
-# Extract only necessary columns
-p_value_df <- tukey_df[, c("Comparison", "p_adj")]
-
-# Add location column for tracking
-p_value_df$Location <- loc
-
-p_value_list <- list()
-
-# Store in list
-p_value_list[[loc]] <- p_value_df
-
-all_p_values <- do.call(rbind, p_value_list)
-
-all_p_values
-
-heatmap <- ggplot(all_p_values, aes(x = Location, y = p_adj, fill = p_adj)) +
-  geom_tile(color = "white") +
-  scale_fill_gradient(low = "blue", high = "red", na.value = "white") +  
-  labs(title = "Heatmap of ANOVA P-values",
-       x = "Location",
-       y = "",
-       fill = "P-value") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.text.y = element_blank())
-heatmap
-
-#Shannon: Significant groups
-#Spleen
-#Pre-ICI vs Post-ICI2, p<0.007
-#Pre-ICI vs Post-ICI3, p<0.008
-#Tumor
-#Post-ICI1 vs Post-ICI3, p<0.01
-
-####Spleen
+#Across Treatment time per location#
+####Spleen#####
 shannon_df_0_spleen <- subset(shannon_df_0, location == "Spleen")
 shannon_df_0_spleen$group <- factor(shannon_df_0_spleen$group, 
                                     levels = c("Pre-ICI", "Post-ICI1", "Post-ICI2", "Post-ICI3"))
